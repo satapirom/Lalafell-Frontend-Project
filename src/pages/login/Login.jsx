@@ -1,3 +1,4 @@
+// Login.jsx
 import React, { useState } from "react";
 import InputField from "../../components/register/InputField";
 import axiosInstance from "../../utils/axiosInstance";
@@ -5,6 +6,7 @@ import formValidate from "../../validations/FormValidate";
 import WelcomeBanner from "../../components/register/WelcomeBanner";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +14,8 @@ const Login = () => {
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
+    const { setIsLoggedIn } = useAuth(); // ใช้ useAuth เพื่อเข้าถึง setIsLoggedIn
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -35,8 +39,9 @@ const Login = () => {
             });
 
             if (response.status === 200) {
+                setIsLoggedIn(true);
                 console.log("Login successful");
-                // Handle successful login (e.g., redirect, save token)
+                navigate('/'); // นำทางไปที่หน้า Home
             } else {
                 console.log("Login failed");
             }
@@ -108,4 +113,5 @@ const Login = () => {
 };
 
 export default Login;
+
 

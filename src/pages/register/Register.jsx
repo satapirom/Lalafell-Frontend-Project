@@ -4,7 +4,7 @@ import Terms from "./Terms";
 import axiosInstance from "../../utils/axiosInstance";
 import formValidate from "../../validations/FormValidate";
 import WelcomeBanner from "../../components/register/WelcomeBanner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
 
 const Register = () => {
@@ -17,6 +17,8 @@ const Register = () => {
     });
     const [showPassword, setShowPassword] = useState(false);
     const [showTerms, setShowTerms] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, type, checked, value } = e.target;
@@ -50,6 +52,7 @@ const Register = () => {
 
             if (response.status === 201) {
                 console.log("Registration successful");
+                navigate('/login');
             } else {
                 console.log("Registration failed");
             }

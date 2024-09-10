@@ -3,10 +3,13 @@ import IconSearch from './IconSearch';
 import IconProfile from './IconProfile';
 import IconCarts from '../Navbar/IconCarst';
 import Sidebar from '../Sidebar/Sidebar';
+import useAuthForNavigate from '../../../hooks/user/useAuthForNavigate';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // state การล็อกอิน
+    // ปรับการ destructure เป็น object
+    const { isLoggedIn, setIsLoggedIn, login, logout } = useAuthForNavigate();
 
     return (
         <div className="relative z-100 shadow-lg rounded-b-3xl bg-white">
@@ -21,17 +24,18 @@ const Navbar = () => {
                                 alt="Menu"
                             />
                             <div className="flex flex-1 justify-center items-center">
-                                <a href='#'>
+                                <Link to="/">
                                     <h2 className='text-lg tablet:text-xl laptop:text-2xl font-bold text-gray-800'>
                                         Lalafell
                                     </h2>
-                                </a>
+                                </Link>
                             </div>
                         </div>
                         <div className="flex space-x-4 items-center">
                             <IconSearch />
                             <IconCarts />
-                            <IconProfile />
+                            <IconProfile
+                            />
                         </div>
                     </div>
                 </div>
