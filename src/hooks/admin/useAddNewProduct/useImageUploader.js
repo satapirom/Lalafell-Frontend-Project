@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
+import axiosInstance from '../../../utils/axiosInstance';
 
 const useImageUploader = () => {
     const [uploadedImages, setUploadedImages] = useState([]);
     const [replaceIndex, setReplaceIndex] = useState(null);
-    const [uploading, setUploading] = useState(false); // สถานะอัพโหลด
+    const [uploading, setUploading] = useState(false);
 
     const onDrop = (acceptedFiles) => {
+        console.log('Accepted files:', acceptedFiles); // แสดงไฟล์ที่ถูกเลือกในคอนโซล
+
         setUploadedImages((prevImages) => {
             const newImages = [...prevImages];
             if (replaceIndex !== null) {
@@ -36,21 +38,36 @@ const useImageUploader = () => {
             return newImages;
         });
     };
-
     const uploadImages = async () => {
-        setUploadStatus("Uploading....");
-        const formData = new FormData();
-        selectedImages.forEach((image) => {
-            formData.append("file", image);
-        });
-        try {
-            const response = await axios.post("/products", formData);
-            console.log(response.data);
-            setUploadStatus("upload successful");
-        } catch (error) {
-            console.log("imageUpload" + error);
-            setUploadStatus("Upload failed..");
-        }
+        setUploading(true);
+
+        const uploadImages = async () => {
+            setUploading(true);
+
+            const formData = new FormData();
+            uploadedImages.forEach((image) => {
+                console.log('Image before upload:', image); // ตรวจสอบรูปภาพก่อนส่ง
+                formData.append('images', image);
+            });
+
+
+            try {
+                const response = await axiosInstance.post('/upload', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                console.log('Server response:', response.data);
+                return response.data.imageUrls; // Assuming the server returns an array of image URLs
+            } catch (error) {
+                console.error('Error uploading images:', error.response ? error.response.data : error.message);
+                throw error; // Re-throw the error so it can be caught in handleAddNewProduct
+            } finally {
+                setUploading(false);
+            }
+        };
+
+        return { uploadedImages, getRootProps, getInputProps, removeImage, replaceImage, uploadImages };
     };
 
     const { getRootProps, getInputProps } = useDropzone({

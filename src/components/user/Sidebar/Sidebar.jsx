@@ -31,10 +31,10 @@ const Sidebar = ({ isOpen, onClose }) => {
                             <FaHome size={22} />
                             <span className="text-lg">Home</span>
                         </Link>
-                        <li className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
+                        <Link to="/products" className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
                             <FaShoppingCart size={22} />
                             <span className="text-lg">Products</span>
-                        </li>
+                        </Link>
 
                         {/* เมนูสำหรับผู้ใช้ที่ยังไม่ได้ล็อกอิน */}
                         {!isLoggedIn && (

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Banner = () => {
     return (
-        <div className="container mx-auto px-4 py-2 max-w-screen-laptopl z-10">
+        <div className="container mx-auto px-4 py-4 my-8 max-w-screen-laptopl z-10">
             <div className="relative w-full">
                 <img
                     src="../images/hero-banner-1.png"

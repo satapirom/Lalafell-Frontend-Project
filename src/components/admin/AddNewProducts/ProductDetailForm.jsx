@@ -1,4 +1,4 @@
-const ProductDetailForm = ({ formData, handleChange }) => {
+const ProductDetailForm = ({ formData, handleChange, handleFileUpload }) => {
     return (
         <div className="mb-6 sm:p-6 md:p-8 lg:p-10 xl:p-12">
             <label className="block text-sm font-medium text-gray-700">Product Name</label>
@@ -46,6 +46,16 @@ const ProductDetailForm = ({ formData, handleChange }) => {
                 className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
             />
             <label className="block text-sm font-medium text-gray-700 mt-6">Quantity</label>
+
+            <label className="block text-sm font-medium text-gray-700 mt-6">Product Images</label>
+            <input
+                type="file"
+                name="images"
+                accept="image/*"
+                multiple
+                onChange={handleFileUpload}
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
+            />
         </div>
     );
 };

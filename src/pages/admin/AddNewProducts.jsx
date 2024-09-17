@@ -21,6 +21,7 @@ const initialFormState = {
     price: '',
     inventory: '',
     brand: '',
+    images: [],
 
 };
 
@@ -50,16 +51,21 @@ const AddNewProduct = () => {
     const [error, setError] = useState(null);
 
     const handleAddNewProduct = async (e) => {
-        console.log(e.target.files);
+        e.preventDefault();  // ป้องกันการ reload หน้าจอ
         setLoading(true);
         setError(null);
+
         try {
+            // รอให้รูปภาพทั้งหมดอัปโหลดเสร็จ
+            const uploadedImageURLs = await uploadImages();  // uploadImages() ควรอัปโหลดรูปและคืน URL
+
             const productData = {
                 ...formData,
-                images: uploadedImages.map(image => image.url), // Use image URLs after upload
+                images: uploadedImageURLs,  // ใส่ URLs ของรูปภาพที่อัปโหลดแล้ว
             };
 
             const response = await axiosInstance.post('/products', productData);
+
             if (response.status === 201) {
                 alert('Product created successfully');
                 resetForm();
@@ -71,6 +77,32 @@ const AddNewProduct = () => {
             setLoading(false);
         }
     };
+
+    const uploadImages = async () => {
+        try {
+            // Upload all images and get their URLs
+            const imagePromises = uploadedImages.map(async (image) => {
+                const formData = new FormData();
+                formData.append('file', image);  // 'image' ควรเป็นไฟล์จริงที่ต้องอัปโหลด
+                formData.append('upload_preset', 'your_cloudinary_preset');  // ใส่ค่าจาก Cloudinary
+
+                // อัปโหลดไปยัง Cloudinary
+                const response = await axiosInstance.post(
+                    '/products',
+                    formData
+                );
+
+                return response.data.secure_url;  // คืน URL ของรูปภาพที่อัปโหลดแล้ว
+            });
+
+            const uploadedImageURLs = await Promise.all(imagePromises);
+            return uploadedImageURLs;
+        } catch (error) {
+            console.error('Error uploading images:', error);
+            throw new Error('Image upload failed');
+        }
+    };
+
 
 
     return (
@@ -86,13 +118,13 @@ const AddNewProduct = () => {
             </header>
             <div className="flex flex-col laptop:grid laptop:grid-cols-2 gap-8">
                 <div className="flex-1">
-                    <ProductImagesForm
+                    {/* <ProductImagesForm
                         uploadedImages={uploadedImages}
                         getRootProps={getRootProps}
                         getInputProps={getInputProps}
                         onRemove={removeImage}
                         replaceImage={replaceImage}
-                    />
+                    /> */}
                     <ProductDetailForm
                         formData={formData}
                         handleChange={handleChange}
@@ -109,5 +141,4 @@ const AddNewProduct = () => {
 };
 
 export default AddNewProduct;
-
 

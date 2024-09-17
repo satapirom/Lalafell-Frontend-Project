@@ -1,12 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Hind:wght@400;500;700&display=swap");@import url("https://fonts.googleapis.com/css2?family=Hind:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Hind:wght@400;500;700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 * {
     font-family: "Hind";
+    scroll-behavior: smooth;
   }
   
   body {
     @apply dark:bg-black dark:text-white;
   }
+
+
+
