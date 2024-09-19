@@ -4,9 +4,6 @@ import { BASE_URL } from "../utils/constants"; // นำเข้าค่าจ
 const axiosInstance = axios.create({
     baseURL: BASE_URL,
     timeout: 10000, // กำหนดเวลา timeout
-    headers: {
-        "Content-Type": "application/json",
-    },
 });
 
 // Request interceptor

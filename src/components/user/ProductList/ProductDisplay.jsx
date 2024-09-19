@@ -1,68 +1,125 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import ProductCard from '../Products/ProductCard';
+import axiosInstance from '../../../utils/axiosInstance';
+import useToggle from '../../../hooks/user/useToggle';
+import SortBy from './SortBy';
+import SizeFilter from './SizeFilter';
+import CategoryFilter from './CatagoryFilter';
 
 const ProductDisplay = () => {
-    // ข้อมูลสินค้าจริง
-    const products = Array.from({ length: 23 }, (_, i) => ({
-        id: i + 1,
-        name: `Product ${i + 1}`,
-        description: `This is the description for product ${i + 1}.`
-    }));
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [sortOption, setSortOption] = useState('price');
+    const [selectedSize, setSelectedSize] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const { isOpen: isSizeOpen, toggle: toggleSize, onClose: onCloseSize } = useToggle();
+    const { isOpen: isCategoryOpen, toggle: toggleCategory, onClose: onCloseCategory } = useToggle();
 
-    const itemsPerPage = 12;
-    const [currentPage, setCurrentPage] = useState(1);
+    const fetchProducts = useCallback(async () => {
+        setLoading(true);
+        try {
+            console.log(`Fetching products with sort: ${sortOption}, size: ${selectedSize}, category: ${selectedCategory}`);
+            const response = await axiosInstance.get(`/products`, {
+                params: { size: selectedSize, category: selectedCategory }
+            });
+            const fetchedProducts = response.data.products;
+            console.log('Fetched products:', fetchedProducts);
+            if (!Array.isArray(fetchedProducts)) {
+                throw new Error('Products is not an array');
+            }
+            setProducts(fetchedProducts);
+        } catch (err) {
+            console.error('Error fetching products:', err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    }, [selectedSize, selectedCategory, sortOption]);
 
-    // คำนวณจำนวนหน้าจากจำนวนสินค้า
-    const totalPages = Math.ceil(products.length / itemsPerPage);
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
-    // กำหนดขอบเขตของสินค้าที่จะแสดงในแต่ละหน้า
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentProducts = products.slice(startIndex, endIndex);
+    const handleSortChange = (newSortOption) => {
+        console.log('Changing sort option to:', newSortOption);
+        setSortOption(newSortOption);
+    };
+
+    const handleSizeSelect = (size) => {
+        console.log('selectedSize:', size);
+        setSelectedSize(size);
+    };
+
+    const handleCategorySelect = (category) => {
+        console.log('selectedCategory:', category);
+        setSelectedCategory(category);
+    };
+
+    const sortedAndFilteredProducts = useMemo(() => {
+        const filtered = products
+            .filter(product => selectedSize === '' || product.size === selectedSize)
+            .filter(product => selectedCategory === '' || product.category === selectedCategory);
+
+        const sortByOption = (a, b) => {
+            switch (sortOption) {
+                case 'price':
+                    return a.price - b.price;
+                case 'name':
+                    return a.name.localeCompare(b.name);
+                case 'rating':
+                    return b.rating - a.rating; // Assuming higher rating is better
+                default:
+                    return 0;
+            }
+        };
+
+        return filtered.slice().sort(sortByOption);
+    }, [products, selectedSize, selectedCategory, sortOption]);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="p-6">
-            {/* ส่วนหัวของหน้า */}
-            <div className='flex justify-between items-center mb-6'>
-                <h4 className="text-2xl font-semibold">Products ({products.length})</h4>
-                <div>
-                    <label className="mr-2">Sort by:</label>
-                    <select className="border rounded-md p-1">
-                        <option value="price">Price</option>
-                        <option value="popularity">Popularity</option>
-                        <option value="newest">Newest</option>
-                    </select>
+        <div className="p-6 relative">
+            <div className='flex justify-between items-center mb-2'>
+                <h4 className="text-xl font-semibold">Products ({sortedAndFilteredProducts.length})</h4>
+                <div className="flex space-x-4 items-center">
+                    <CategoryFilter
+                        isSizeOpen={isCategoryOpen}
+                        toggleSize={toggleCategory}
+                        handleCategorySelect={handleCategorySelect}
+                        selectedCategory={selectedCategory}
+                        onClose={onCloseCategory}
+                    />
+                    <SizeFilter
+                        isSizeOpen={isSizeOpen}
+                        toggleSize={toggleSize}
+                        handleSizeSelect={handleSizeSelect}
+                        selectedSize={selectedSize}
+                        onClose={onCloseSize}
+                    />
+                    <SortBy
+                        setSortOption={handleSortChange}
+                        sortOption={sortOption}
+                    />
                 </div>
             </div>
-
-            {/* กริดแสดงสินค้า */}
-            <div className='grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-4'>
-                {currentProducts.map((product) => (
-                    <div key={product.id} className="border p-4 rounded-lg shadow-sm hover:shadow-md">
-                        <h1 className="font-bold text-lg">{product.name}</h1>
-                        <p>{product.description}</p>
-                        <button
-                            className="bg-blue-500 text-white py-1 px-2 rounded mt-4"
-                            onClick={() => alert(`You clicked on ${product.name}`)}
-                        >
-                            View Product
-                        </button>
-                    </div>
-                ))}
-            </div>
-
-            {/* แสดงเลขหน้าถ้ามีมากกว่า 10 สินค้า */}
-            {totalPages > 1 && (
-                <div className="mt-8 flex justify-center space-x-2">
-                    {/* ปุ่มเปลี่ยนหน้า */}
-                    {Array.from({ length: totalPages }, (_, index) => (
-                        <button
-                            key={index + 1}
-                            className={`py-1 px-3 rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                            onClick={() => setCurrentPage(index + 1)}
-                        >
-                            {index + 1}
-                        </button>
+            {sortedAndFilteredProducts.length > 0 ? (
+                <div className="flex flex-wrap justify-between">
+                    {sortedAndFilteredProducts.map((product) => (
+                        <div className="w-full tablet:w-1/4 p-2" key={product._id}>
+                            <ProductCard product={product} />
+                        </div>
                     ))}
+                </div>
+            ) : (
+                <div>
+                    <img
+                        className="mx-auto w-10 mt-10"
+                        src='../images/emoticon.png'>
+                    </img>
+                    <h4 className="text-lg text-center text-gray-700 mt-4 font-semibold">No products found</h4>
                 </div>
             )}
         </div>
@@ -70,4 +127,7 @@ const ProductDisplay = () => {
 };
 
 export default ProductDisplay;
+
+
+
 

@@ -72,7 +72,7 @@ const WhatNewProduct = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchProducts = async () => {
+        const getProducts = async () => {
             try {
                 const response = await axiosInstance.get('/products'); // แก้ไข URL ให้ตรงกับ API ของคุณ
                 const products = response.data.products;
@@ -96,7 +96,7 @@ const WhatNewProduct = () => {
             }
         };
 
-        fetchProducts();
+        getProducts();
     }, []);
 
     useEffect(() => {

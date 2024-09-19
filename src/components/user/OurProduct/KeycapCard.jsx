@@ -1,9 +1,9 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom'
 const KeycapCard = () => {
     return (
         <div className="bg-white rounded-xl shadow-lg relative mx-auto my-4 flex flex-col h-40 laptop:h-52 w-full overflow-hidden">
-            <div className="relative">
+            <Link to='/products/catagory?category=keycap' className="relative">
                 <img
                     src="../images/keycap.jpg"
                     alt="Keyboard"
@@ -17,7 +17,7 @@ const KeycapCard = () => {
                         <span className="text-xs labtop:text-base">Rating</span>
                     </div>
                 </div>
-            </div>
+            </Link>
         </div>
     )
 }
