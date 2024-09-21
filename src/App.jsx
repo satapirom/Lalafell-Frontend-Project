@@ -12,7 +12,7 @@ import Product from './pages/user/Product.jsx';
 // admin
 import AddProducts from './pages/admin/AddProducts.jsx';
 import Card from './components/user/OurProduct/Card.jsx';
-import ProductDetailPage from './pages/user/ProductDetailPage.jsx'
+import ProductDetail from './components/user/ProductDetail/ProductDetail.jsx';
 
 function App() {
   return (
@@ -40,7 +40,7 @@ function MainApp() {
         <Route path='/register' element={<Register />} />
         <Route path='/login' element={<Login />} />
         <Route path='/products' element={<Product />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
 
 
         {/* Admin */}

@@ -2,21 +2,20 @@ import React from 'react';
 import usePasswordVisibility from '../../hooks/user/usePasswordVisibility';
 
 const InputField = ({
-    label, // รับค่า label ผ่าน props
+    label,
     type,
     placeholder,
     name,
     value,
-    validation,
+    error, // เปลี่ยนชื่อจาก validation เป็น error
     onChange,
-    error,
     maxLength
 }) => {
     const { isVisible, toggleVisibility } = usePasswordVisibility();
 
     return (
         <div className="relative mb-4 lg:mb-6 w-full">
-            <label className="block text-sm text-gray-600 mb-1"> {/* ใช้ mb-1 เพื่อเว้นระยะ */}
+            <label className="block text-sm text-gray-600 mb-1">
                 {label}
             </label>
             <div className="flex items-center w-full">
@@ -25,9 +24,8 @@ const InputField = ({
                     placeholder={placeholder}
                     name={name}
                     value={value}
-                    validation
                     onChange={onChange}
-                    className={`w-full px-4 py-2 bg-white hover:bg-gray-100 border border-gray-300 rounded-md focus:outline-none ${error ? 'border-red-500' : 'border border-gray-300'}`}
+                    className={`w-full px-4 py-2 bg-white hover:bg-gray-100 border border-gray-300 rounded-md focus:outline-none ${error ? 'border-red-500' : 'border-gray-300'}`}
                     maxLength={maxLength}
                     required
                 />
@@ -42,10 +40,11 @@ const InputField = ({
                     </div>
                 )}
             </div>
-            {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
+            {error && <p className="text-red-500 text-xs mt-1">{error}</p>} {/* แสดงข้อความข้อผิดพลาด */}
         </div>
     );
 };
 
 export default InputField;
+
 

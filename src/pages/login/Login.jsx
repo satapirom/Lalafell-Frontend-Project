@@ -14,7 +14,7 @@ const Login = () => {
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
-    const { setIsLoggedIn } = useAuth(); // ใช้ useAuth เพื่อเข้าถึง setIsLoggedIn
+    const { setIsLoggedIn, login } = useAuth(); // ใช้ useAuth เพื่อเข้าถึง setIsLoggedIn
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -39,17 +39,23 @@ const Login = () => {
             });
 
             if (response.status === 200) {
-                setIsLoggedIn(true);
-                console.log("Login successful");
-                navigate('/'); // นำทางไปที่หน้า Home
+                console.log("Response data: ", response.data); // ตรวจสอบข้อมูลที่ตอบกลับ
+                if (response.data.accessToken) { // เปลี่ยนจาก token เป็น accessToken
+                    localStorage.setItem('token', response.data.accessToken); // เก็บ accessToken
+                    login(); // เรียกใช้ login
+                    console.log("Login successful");
+                    navigate('/'); // นำทางไปที่หน้า Home
+                } else {
+                    console.log("Token not found in response");
+                }
             } else {
                 console.log("Login failed");
             }
-
         } catch (error) {
             console.log("An error occurred: ", error.message);
         }
     };
+
 
     return (
         <div className="bg-gray-100 flex items-center justify-center">
