@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import InputField from "../../components/register/InputField";
 import axiosInstance from "../../utils/axiosInstance";
-import formValidate from "../../validations/FormValidate";
+import FormValidate from "../../validations/FormValidate";
 import WelcomeBanner from "../../components/register/WelcomeBanner";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
@@ -77,14 +77,14 @@ const Login = () => {
                                 type: "text",
                                 name: "username",
                                 value: formData.username,
-                                validation: formValidate.username
+                                validation: FormValidate.username
                             },
                             {
                                 label: "Password",
                                 type: showPassword ? "text" : "password",
                                 name: "password",
                                 value: formData.password,
-                                validation: formValidate.password
+                                validation: FormValidate.password
                             }
                         ].map((field, index) => (
                             <InputField

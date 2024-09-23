@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import InputField from "../../components/register/InputField";
 import Terms from "./Terms";
 import axiosInstance from "../../utils/axiosInstance";
-import formValidate from "../../validations/FormValidate";
+import FormValidate from "../../validations/FormValidate";
 import WelcomeBanner from "../../components/register/WelcomeBanner";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
@@ -87,28 +87,28 @@ const Register = () => {
                                     type: "text",
                                     name: "username",
                                     value: formData.username,
-                                    validation: formValidate.username
+                                    validation: FormValidate.username
                                 },
                                 {
                                     label: "Email",
                                     type: "email",
                                     name: "email",
                                     value: formData.email,
-                                    validation: formValidate.email
+                                    validation: FormValidate.email
                                 },
                                 {
                                     label: "Password",
                                     type: showPassword ? "text" : "password",
                                     name: "password",
                                     value: formData.password,
-                                    validation: formValidate.password
+                                    validation: FormValidate.password
                                 },
                                 {
                                     label: "Confirm Password",
                                     type: "password",
                                     name: "confirmPassword",
                                     value: formData.confirmPassword,
-                                    validation: formValidate.confirmPassword
+                                    validation: FormValidate.confirmPassword
                                 },
                             ].map((field, index) => (
                                 <InputField

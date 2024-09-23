@@ -1,6 +1,6 @@
 import React from 'react'
 
-const formValidate = {
+const FormValidate = {
     username: {
         required: "username is required",
         pattern: {
@@ -32,4 +32,4 @@ const formValidate = {
     }
 };
 
-export default formValidate;
+export default FormValidate;
