@@ -1,8 +1,8 @@
 import axios from "axios";
-// import { BASE_URL, PROD_URL } from "../utils/constants"; // นำเข้าค่าจาก constants
+import { BASE_URL } from "../utils/constants"; // นำเข้าค่าจาก constants
 
 // ใช้ค่าจาก environment variables
-const baseUrl = import.meta.env.VITE_BASE_URL;
+const baseUrl = import.meta.env.VITE_BASE_URL || BASE_URL;
 const prodUrl = import.meta.env.VITE_PROD_URL;
 
 // สร้าง axios instance
