@@ -2,12 +2,12 @@ import axios from "axios";
 import { BASE_URL, PROD_URL } from "../utils/constants"; // นำเข้าค่าจาก constants
 
 // ใช้ค่าจาก environment variables
-const baseUrl = import.meta.env.VITE_BASE_URL || BASE_URL;
-const prodUrl = import.meta.env.VITE_PROD_URL || PROD_URL;
+const isDevelopment = import.meta.env.MODE === 'development'; // ตรวจสอบว่าอยู่ในโหมดพัฒนา
+const baseUrl = isDevelopment ? BASE_URL : PROD_URL; // กำหนด base URL
 
 // สร้าง axios instance
 const axiosInstance = axios.create({
-    baseURL: baseUrl || prodUrl, // กำหนด base URL
+    baseURL: baseUrl, // กำหนด base URL
     timeout: 10000, // กำหนดเวลา timeout
 });
 
@@ -32,7 +32,6 @@ axiosInstance.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             // Token หมดอายุ
             try {
-                // ถ้าต้องการรีเฟรช token สามารถทำได้ที่นี่
                 console.error("Token refresh failed");
             } catch (refreshError) {
                 console.error("Token refresh error", refreshError);
@@ -45,10 +44,7 @@ axiosInstance.interceptors.response.use(
     }
 );
 
-// ตรวจสอบค่า baseUrl และ prodUrl
+// ตรวจสอบค่า baseUrl
 console.log("Base URL:", baseUrl);
-console.log("Prod URL:", prodUrl);
 
 export default axiosInstance;
-
-
