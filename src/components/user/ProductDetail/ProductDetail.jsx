@@ -10,10 +10,11 @@ import { useAuth } from '../../../contexts/AuthContext';
 
 const ProductDetail = () => {
     const { id } = useParams();
-    const { isLoggedIn } = useAuth();
+    const { isLoggedIn, user } = useAuth();
     const [product, setProduct] = useState(null);
     const [comment, setComment] = useState('');
     const [userRating, setUserRating] = useState(0);
+    const [reviews, setReviews] = useState([]);
     const [isExpanded, setIsExpanded] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [total, setTotal] = useState(0);
@@ -21,21 +22,25 @@ const ProductDetail = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchProduct = async () => {
+        const fetchProductAndReviews = async () => {
             try {
-                const response = await axiosInstance.get(`/products/${id}`);
-                if (response.status === 200) {
-                    setProduct(response.data.product);
-                }
+                setIsLoading(true);
+                const [productResponse, reviewsResponse] = await Promise.all([
+                    axiosInstance.get(`/products/${id}`),
+                    axiosInstance.get(`/products/${id}/reviews`)
+                ]);
+                setProduct(productResponse.data.product);
+                setReviews(reviewsResponse.data);
+                setIsLoading(false);
             } catch (error) {
-                console.error('Error fetching product:', error);
+                console.error('Error fetching product and reviews:', error);
+                setError('Failed to load product and reviews');
+                setIsLoading(false);
             }
         };
 
-        fetchProduct();
+        fetchProductAndReviews();
     }, [id]);
-
-
 
     useEffect(() => {
         if (product) {
@@ -50,49 +55,40 @@ const ProductDetail = () => {
     const handleCommentSubmit = async (e) => {
         e.preventDefault();
 
-        const userToken = localStorage.getItem('token');
-
-        if (comment.trim() && userRating > 0 && isLoggedIn && userToken) {
-            const newReview = { comment: comment, rating: userRating };  // Changed 'text' to 'comment'
+        if (comment.trim() && userRating > 0 && isLoggedIn) {
+            const newReview = { comment, rating: userRating };
 
             try {
-                const response = await axiosInstance.post(`/products/${id}/reviews`, newReview, {
-                    headers: {
-                        Authorization: `Bearer ${userToken}`
-                    }
-                });
+                const response = await axiosInstance.post(`/products/${id}/reviews`, newReview);
                 if (response.status === 201) {
-                    setProduct(prev => ({
-                        ...prev,
-                        comments: [...(prev.comments || []), response.data.review],
-                        reviews: (prev.reviews || 0) + 1
-                    }));
+                    const createdReview = response.data.review;
+                    setReviews(prevReviews => [createdReview, ...prevReviews]);
                     setComment('');
                     setUserRating(0);
                     setError(null);
                 }
             } catch (error) {
-                console.error('Error submitting comment:', error.response?.data?.message || error.message);
+                console.error('Error submitting comment:', error);
                 setError(error.response?.data?.message || 'An error occurred while submitting your review.');
             }
         } else {
-            setError('Please make sure you are logged in, your comment is not empty, and you have selected a rating.');
+            setError('Please ensure you are logged in, have written a comment, and selected a rating.');
         }
     };
 
-
-
     const calculateAverageRating = () => {
-        if (!product || !product.comments || product.comments.length === 0) return 0;
-        const sum = product.comments.reduce((acc, curr) => acc + curr.rating, 0);
-        return (sum / product.comments.length).toFixed(1);
+        if (!reviews || reviews.length === 0) return 0;
+        const sum = reviews.reduce((acc, curr) => acc + curr.rating, 0);
+        return (sum / reviews.length).toFixed(1);
     };
 
     const toggleDescription = () => {
         setIsExpanded(!isExpanded);
     };
 
-    if (!product) return <div>Loading...</div>;
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+    if (!product) return <div>Product not found</div>;
 
     return (
         <div className="max-w-screen-laptopl mx-auto my-24 bg-white p-6">
@@ -104,7 +100,7 @@ const ProductDetail = () => {
                             slidesPerView={1}
                             pagination={{ clickable: true }}
                             modules={[Pagination]}
-                            className=" mb-4 w-full h-full rounded-xl overflow-hidden"
+                            className="mb-4 w-full h-full rounded-xl overflow-hidden"
                         >
                             {Array.isArray(product.images) && product.images.length > 0 ? (
                                 product.images.map((img, index) => (
@@ -159,7 +155,7 @@ const ProductDetail = () => {
                                     />
                                 ))}
                             </div>
-                            <span className="ml-2 text-gray-500">({product.reviews || 0} reviews)</span>
+                            <span className="ml-2 text-gray-500">({reviews.length} reviews)</span>
                         </div>
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center">
@@ -233,19 +229,27 @@ const ProductDetail = () => {
                 )}
 
                 <div className="space-y-4">
-                    {product.comments && product.comments.map((comment, index) => (
+                    {reviews.map((review, index) => (
                         <div key={index} className="bg-gray-100 p-4 rounded-md shadow-md">
-                            <p>{comment.text}</p>
                             <div className="flex items-center mb-2">
-                                <div className="flex">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <BsStarFill
-                                            key={star}
-                                            className={`w-4 h-4 ${star <= comment.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                                        />
-                                    ))}
+                                <img
+                                    src={review.user.profileImage || '/default-profile.png'}
+                                    alt={`${review.user.username}'s profile`}
+                                    className="w-10 h-10 rounded-full mr-3"
+                                />
+                                <div>
+                                    <p className="font-semibold">{review.user.username}</p>
+                                    <div className="flex">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <BsStarFill
+                                                key={star}
+                                                className={`w-4 h-4 ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
+                                            />
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
+                            <p>{review.comment}</p>
                         </div>
                     ))}
                 </div>
@@ -255,6 +259,5 @@ const ProductDetail = () => {
 };
 
 export default ProductDetail;
-
 
 

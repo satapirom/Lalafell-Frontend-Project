@@ -8,11 +8,13 @@ import Home from './pages/user/Home';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import Footer from './components/user/Footer/Footer';
 import Product from './pages/user/Product.jsx';
+import Profile from './pages/user/Profile.jsx';
 
 // admin
 import AddProducts from './pages/admin/AddProducts.jsx';
 import Card from './components/user/OurProduct/Card.jsx';
 import ProductDetail from './components/user/ProductDetail/ProductDetail.jsx';
+
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function MainApp() {
         <Route path='/login' element={<Login />} />
         <Route path='/products' element={<Product />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/profile" element={<Profile />} />
+
 
 
         {/* Admin */}
