@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import InputField from "../../components/register/InputField";
 import Terms from "./Terms";
 import axiosInstance from "../../utils/axiosInstance";
-import FormValidate from "../../validations/FormValidate";
+import FormValidate from "../../validations/FormValidate.js";
 import WelcomeBanner from "../../components/register/WelcomeBanner";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
