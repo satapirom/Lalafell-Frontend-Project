@@ -6,7 +6,7 @@ import FormValidate from "../../validations/FormValidate";
 import WelcomeBanner from "../../components/register/WelcomeBanner";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
-
+//test
 const Register = () => {
     const [formData, setFormData] = useState({
         username: "",
