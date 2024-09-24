@@ -1,14 +1,16 @@
 import axios from "axios";
-import { BASE_URL } from "../utils/constants"; // นำเข้าค่าจาก constants
 
 // ใช้ค่าจาก environment variables
-const baseUrl = import.meta.env.VITE_BASE_URL || BASE_URL;
-const prodUrl = import.meta.env.VITE_PROD_URL;
+const baseApiUrl = import.meta.env.VITE_BASE_API_URL;
+console.log("Base API URL:", baseApiUrl);
+console.log(import.meta.env);  // ตรวจสอบว่ามี VITE_BASE_API_URL หรือไม่
+
+
 
 // สร้าง axios instance
 const axiosInstance = axios.create({
-    baseURL: baseUrl || prodUrl, // กำหนด base URL
-    timeout: 10000, // กำหนดเวลา timeout
+    baseURL: baseApiUrl,
+    timeout: 10000,
     headers: {
         "Content-Type": "application/json",
     },
@@ -49,8 +51,7 @@ axiosInstance.interceptors.response.use(
 );
 
 // ตรวจสอบค่า baseUrl และ prodUrl
-console.log("Base URL:", baseUrl);
-console.log("Prod URL:", prodUrl);
+console.log("Base API URL:", baseApiUrl);
 
 export default axiosInstance;
 
