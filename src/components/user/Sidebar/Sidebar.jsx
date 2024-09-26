@@ -31,7 +31,9 @@ const Sidebar = ({ isOpen, onClose }) => {
                             <FaHome size={22} />
                             <span className="text-lg">Home</span>
                         </Link>
-                        <Link to="/products" className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
+                        <Link to="/products"
+                            onClick={onClose}
+                            className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
                             <FaShoppingCart size={22} />
                             <span className="text-lg">Products</span>
                         </Link>
@@ -57,19 +59,26 @@ const Sidebar = ({ isOpen, onClose }) => {
                         {/* เมนูสำหรับผู้ใช้ที่ล็อกอินแล้ว */}
                         {isLoggedIn && (
                             <>
-                                <li className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
+                                <Link to="/profile"
+                                    onClick={onClose}
+                                    className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
                                     <FaUser size={22} />
                                     <span className="text-lg">Profile</span>
-                                </li>
-                                <li className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
+                                </Link>
+                                <li
+
+                                    className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
                                     <FaHeart size={22} />
                                     <span className="text-lg">Wishlist</span>
                                 </li>
-                                <li className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
+                                <li
+
+                                    className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
                                     <FaBoxOpen size={22} />
                                     <span className="text-lg">Orders</span>
                                 </li>
-                                <li className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors" onClick={handleLogout}>
+                                <li
+                                    className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors" onClick={handleLogout}>
                                     <FaSignOutAlt size={22} />
                                     <span className="text-lg">Logout</span>
                                 </li>

@@ -9,9 +9,7 @@ const Product = () => {
         <div className='container mx-auto  py-4 my-4 max-w-screen-laptopl'>
             <Banner />
             <div>
-
                 <ProductDisplay />
-
             </div>
         </div>
     )

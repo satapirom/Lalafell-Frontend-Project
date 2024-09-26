@@ -1,7 +1,6 @@
 import './App.css';
 import Navbar from './components/user/Navbar/Navbar';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import AddNewProduct from './pages/admin/AddNewProducts';
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
 import Home from './pages/user/Home';
