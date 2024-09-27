@@ -1,9 +1,27 @@
 import { FaHome, FaShoppingCart, FaHeart, FaBoxOpen, FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext"; // ปรับ path ตามที่คุณใช้
+import { useState, useEffect } from "react";
+import axiosInstance from "../../../utils/axiosInstance";
 
 const Sidebar = ({ isOpen, onClose }) => {
     const { isLoggedIn, logout } = useAuth();
+    const [profile, setProfile] = useState({});
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const response = await axiosInstance.get('/users/profile');
+                setProfile(response.data.myUser);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        if (isLoggedIn) {
+            fetchProfile();
+        }
+    }, [isLoggedIn]);
 
     const handleLogout = () => {
         logout();
@@ -87,12 +105,15 @@ const Sidebar = ({ isOpen, onClose }) => {
                     </ul>
 
                     {/* เมนูโปรไฟล์สำหรับผู้ที่ล็อกอินแล้ว */}
-                    {isLoggedIn && (
+                    {isLoggedIn && profile && (
                         <div className="flex items-center space-x-3 mt-6">
-                            <img src="https://via.placeholder.com/40" alt="Profile" className="rounded-full" />
+                            <img
+                                src={profile.profileImage && profile.profileImage[0]?.url || '../images/avata-profile.png'}
+                                alt={profile.username || 'User'}
+                                className="w-10 h-10 rounded-full"
+                            />
                             <div>
-                                <p className="text-lg font-semibold">Dianne Robertson</p>
-                                <p className="text-sm text-gray-400">View Profile</p>
+                                <p className="text-lg font-semibold">{profile.username || 'User'}</p>
                             </div>
                         </div>
                     )}

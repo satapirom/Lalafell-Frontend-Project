@@ -8,11 +8,13 @@ import { AuthProvider } from './contexts/AuthContext.jsx';
 import Footer from './components/user/Footer/Footer';
 import Product from './pages/user/Product.jsx';
 import Profile from './pages/user/Profile.jsx';
+import ProductDetail from './components/user/ProductDetail/ProductDetail.jsx';
+import Settings from './pages/user/Settings.jsx';
 
 // admin
 import AddProducts from './pages/admin/AddProducts.jsx';
 import Card from './components/user/OurProduct/Card.jsx';
-import ProductDetail from './components/user/ProductDetail/ProductDetail.jsx';
+
 
 
 function App() {
@@ -43,6 +45,8 @@ function MainApp() {
         <Route path='/products' element={<Product />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+
 
 
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { BsCameraFill } from "react-icons/bs";
 import { IoSettingsSharp } from "react-icons/io5";
 import useUpload from '../../../hooks/user/useUpload.js';
@@ -134,7 +135,9 @@ const ProfileForm = () => {
                     </div>
                     <div className='col-span-1'>
                         <div className=" flex justify-end items-center px-4 space-x-2 text-center">
-                            <IoSettingsSharp size={24} color='#374151' className="cursor-pointer" />
+                            <Link to='/settings'>
+                                <IoSettingsSharp size={24} color='#374151' className="cursor-pointer" />
+                            </Link>
                             <button type="submit" className="bg-gray-200 text-gray-700 px-4 py-2 rounded">Edit</button>
                         </div>
                     </div>

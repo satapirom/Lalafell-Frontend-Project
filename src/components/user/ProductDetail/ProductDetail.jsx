@@ -233,9 +233,9 @@ const ProductDetail = () => {
                         <div key={index} className="bg-gray-100 p-4 rounded-md shadow-md">
                             <div className="flex items-center mb-2">
                                 <img
-                                    src={review.user.profileImage || '/default-profile.png'}
+                                    src={review.user.profileImage?.[0]?.url || '../images/avata-profile.png'}
                                     alt={`${review.user.username}'s profile`}
-                                    className="w-10 h-10 rounded-full mr-3"
+                                    className="w-10 h-10 rounded-full mr-3 object-cover"
                                 />
                                 <div>
                                     <p className="font-semibold">{review.user.username}</p>
