@@ -136,9 +136,9 @@ const AddressManagement = () => {
                         <li key={address._id} className="bg-white rounded-lg p-6 shadow-md transition-all duration-200 hover:shadow-lg">
                             <div>
                                 <h3 className="text-xl font-semibold text-gray-800">{address.name} | {address.phone} </h3>
-                                <p className="text-gray-600 mt-2 ">{address.street}</p>
-                                <p className="text-gray-600 mb-2">{address.city}, {address.country} {address.postalCode}</p>
-                                {address.isDefault && <span className="text-green-500 font-medium"> (Default)</span>}
+                                <p className="text-sm tablet:text-lg text-gray-600 mt-2 ">{address.street}</p>
+                                <p className="text-sm tablet:text-lg text-gray-600 mb-2">{address.city}, {address.country} {address.postalCode}</p>
+                                {address.isDefault && <span className="text-blue-500 font-medium"> (Default)</span>}
                             </div>
                             <div className="flex justify-end items-center space-x-4 mt-4">
                                 <button

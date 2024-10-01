@@ -3,9 +3,9 @@ import AddressManagement from '../../components/user/Setting/AddressManagement';
 import { FaUserCircle, FaMapMarkerAlt, FaCreditCard, FaQuestionCircle, FaUsers, FaFileAlt, FaBell, FaLanguage, FaShieldAlt } from 'react-icons/fa';
 import SettingsItem from '../../components/user/Setting/SettingsItem';
 import { Cog } from 'lucide-react';
-
+import PaymentManagement from '../../components/user/Setting/PaymentMannagement';
 const Settings = () => {
-    const [activeSection, setActiveSection] = useState(null); // null means no section is active initially
+    const [activeSection, setActiveSection] = useState(null);
 
     const settingsItems = [
         { id: 'account', icon: <FaUserCircle />, title: 'Account & Security', description: 'Manage your personal information and security settings' },
@@ -36,11 +36,11 @@ const Settings = () => {
                             onClick={() => setActiveSection(activeSection === item.id ? null : item.id)}
                         />
 
-                        {/* Render the content under each SettingsItem */}
                         {activeSection === item.id && (
                             <div className="mt-4 p-4 bg-white rounded-lg shadow-md">
                                 {item.id === 'address' && <AddressManagement />}
-                                {item.id !== 'address' && (
+                                {item.id === 'payment' && <PaymentManagement />}
+                                {item.id !== 'address' && item.id !== 'payment' && (
                                     <p className="text-gray-600">
                                         This is where you can manage your {item.title} settings. Content for this section is not implemented in this example.
                                     </p>
@@ -55,4 +55,3 @@ const Settings = () => {
 };
 
 export default Settings;
-

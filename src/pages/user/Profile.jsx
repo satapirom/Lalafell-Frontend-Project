@@ -2,6 +2,7 @@ import React from 'react'
 import ProfileForm from '../../components/user/Profile/ProfileForm'
 import MyPurchases from '../../components/user/Profile/MyPurchases'
 import PurchaseHistory from '../../components/user/Profile/PurchaseHistory'
+import MyPayment from '../../components/user/Profile/MyPayment'
 
 const Profile = () => {
     return (
@@ -9,6 +10,7 @@ const Profile = () => {
             <ProfileForm />
             <MyPurchases />
             <PurchaseHistory />
+            <MyPayment />
         </div>
     )
 }
