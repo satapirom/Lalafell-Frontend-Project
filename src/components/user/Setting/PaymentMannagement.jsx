@@ -12,7 +12,7 @@ import {
     deleteBankAccount
 } from '../../../services/paymentServices';
 
-const PaymentManagement = () => {
+const PaymentManagement = ({ user }) => {
     const [bankAccounts, setBankAccounts] = useState([]);
     const [creditCards, setCreditCards] = useState([]);
     const [error, setError] = useState(null);
@@ -21,21 +21,21 @@ const PaymentManagement = () => {
     const [showCardSection, setShowCardSection] = useState(false);
 
     useEffect(() => {
-        fetchBankAccounts();
+        // fetchBankAccounts();
         fetchCreditCards();
     }, []);
 
-    const fetchBankAccounts = async () => {
-        setIsLoading(true);
-        try {
-            const response = await getBankAccounts();
-            setBankAccounts(response.accounts || []);
-        } catch (error) {
-            handleError(error, 'Failed to load bank accounts.');
-        } finally {
-            setIsLoading(false);
-        }
-    };
+    // const fetchBankAccounts = async () => {
+    //     setIsLoading(true);
+    //     try {
+    //         const response = await getBankAccounts();
+    //         setBankAccounts(response.accounts || []);
+    //     } catch (error) {
+    //         handleError(error, 'Failed to load bank accounts.');
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // };
 
     const fetchCreditCards = async () => {
         setIsLoading(true);
@@ -56,30 +56,36 @@ const PaymentManagement = () => {
 
     const handleAddPaymentMethod = async (paymentMethodData, type) => {
         setIsLoading(true);
+        setError(null);
         try {
-            if (type === 'Bank Account') {
-                const newBankAccount = await createBankAccount(paymentMethodData);
+            console.log('Adding payment method:', type, paymentMethodData);
+            const dataWithUser = { ...paymentMethodData, user: user?.id };
+            if (type === 'bank') {
+                const newBankAccount = await createBankAccount(dataWithUser);
+                console.log('New bank account created:', newBankAccount);
                 setBankAccounts((prev) => [...prev, newBankAccount]);
-            } else if (type === 'Credit Card') {
-                const newCreditCard = await createCreditCard(paymentMethodData);
+            } else if (type === 'card') {
+                const newCreditCard = await createCreditCard(dataWithUser);
+                console.log('New credit card created:', newCreditCard);
                 setCreditCards((prev) => [...prev, newCreditCard]);
             }
-            setError(null);
         } catch (error) {
-            handleError(error, 'Failed to save payment method.');
+            console.error(`Error creating payment method:`, error);
+            setError(`Failed to save payment method: ${error.message}`);
         } finally {
             setIsLoading(false);
         }
     };
 
+
     const handleDeletePaymentMethod = async (id, type) => {
         setIsLoading(true);
         setError(null);
         try {
-            if (type === 'Bank Account') {
+            if (type === 'bank') {
                 await deleteBankAccount(id);
                 setBankAccounts((prev) => prev.filter((account) => account._id !== id));
-            } else if (type === 'Credit Card') {
+            } else if (type === 'card') {
                 await deleteCreditCard(id);
                 setCreditCards((prev) => prev.filter((card) => card._id !== id));
             }
@@ -117,6 +123,7 @@ const PaymentManagement = () => {
                             onDelete={handleDeletePaymentMethod}
                             onAdd={handleAddPaymentMethod}
                             isLoading={isLoading}
+                            user={user}
                         />
                     )}
 
@@ -147,3 +154,4 @@ const PaymentManagement = () => {
 };
 
 export default PaymentManagement;
+
