@@ -18,11 +18,12 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
         if (editingCard) {
             setFormData({
                 ...editingCard,
-                expiryDate: new Date(editingCard.expiryDate),
+                expiryDate: editingCard.expiryDate ? new Date(editingCard.expiryDate) : '',
                 cvv: '' // For security reasons, don't pre-fill CVV
             });
         }
     }, [editingCard]);
+
 
     const handleCardInputChange = (e) => {
         const { name, value } = e.target;
@@ -43,11 +44,11 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
         e.preventDefault();
 
         // Validation
-        if (!formData.cardNumber || formData.cardNumber.length < 16) {
+        if (!editingCard && (!formData.cardNumber || formData.cardNumber.length < 16)) {
             alert('Please enter a valid card number.');
             return;
         }
-        if (!formData.cvv || formData.cvv.length !== 3) {
+        if (!editingCard && (!formData.cvv || formData.cvv.length !== 3)) {
             alert('Please enter a valid CVV.');
             return;
         }
@@ -57,16 +58,19 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
         }
 
         try {
-            // If editing, only update changed fields
+            // If editing, only send changed fields
             const dataToSave = editingCard
                 ? Object.fromEntries(
                     Object.entries(formData).filter(([key, value]) =>
-                        editingCard[key] !== value && key !== 'cvv'
+                        editingCard[key] !== value && key !== 'cvv' && value !== ''
                     )
                 )
                 : formData;
 
-            // Always include CVV for new cards, but only for edits if it's been changed
+            // Always include type
+            dataToSave.type = 'Credit Card';
+
+            // Include CVV for new cards, but only for edits if it's been changed
             if (!editingCard || formData.cvv) {
                 dataToSave.cvv = formData.cvv;
             }

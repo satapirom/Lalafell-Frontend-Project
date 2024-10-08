@@ -62,14 +62,13 @@ export const updateBankAccount = async (id, data) => {
 };
 
 export const updateCreditCard = async (id, data) => {
-    try {
-        const response = await axios.patch(`/payment/credit-cards/${id}`, data);
-        return response.data;
-    } catch (error) {
-        console.error('Error updating credit card:', error);
-        throw error;
-    }
+    console.log('Updating credit card with ID:', id);
+    const sanitizedData = sanitizeData(data);
+    // Ensure type is included in the request
+    sanitizedData.type = 'Credit Card';
+    return await handleApiCall('patch', `${API_ENDPOINTS.USER_CREDIT_CARDS}/${id}`, sanitizedData);
 };
+
 
 export const deleteBankAccount = async (id) => {
     try {
@@ -84,13 +83,14 @@ export const deleteBankAccount = async (id) => {
     }
 };
 
-export const deleteCreditCard = async (id, data) => {
+export const deleteCreditCard = async (id) => {
     try {
-        const response = await axios.delete(`/payment/credit-cards/${id}`, { data });
+        const response = await axiosInstance.delete(`${API_ENDPOINTS.USER_CREDIT_CARDS}/${id}`, {
+            data: { type: 'Credit Card' }
+        });
         return response.data;
     } catch (error) {
         console.error('Error deleting credit card:', error);
         throw error;
     }
 };
-

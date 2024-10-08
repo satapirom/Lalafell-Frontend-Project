@@ -34,28 +34,29 @@ const CreditCardSection = () => {
 
     useEffect(() => {
         fetchCreditCards();
-    }, [fetchCreditCards]);
+    }, []);
 
     const handleSavePaymentMethod = async (data) => {
-        setIsLoading(true);
-        setError(null);
         try {
-            const response = editingCard
-                ? await updateCreditCard(editingCard._id, data)
-                : await createCreditCard(data);
+            let response;
+            if (editingCard && editingCard._id) {
+                // Include the 'type' field when updating
+                response = await updateCreditCard(editingCard._id, { ...data, type: 'Credit Card' });
+            } else {
+                // Include the 'type' field when creating
+                response = await createCreditCard({ ...data, type: 'Credit Card' });
+            }
 
             if (response.error === false) {
                 await fetchCreditCards();
                 setShowForm(false);
                 setEditingCard(null);
             } else {
-                setError(editingCard ? 'Failed to update credit card' : 'Failed to save credit card');
+                setError(editingCard ? 'Failed to update credit card.' : 'Failed to save credit card.');
             }
         } catch (error) {
             console.error('Error in handleSavePaymentMethod:', error);
-            setError(editingCard ? 'Failed to update credit card' : 'Failed to save credit card');
-        } finally {
-            setIsLoading(false);
+            setError(editingCard ? 'Failed to update credit card.' : 'Failed to save credit card.');
         }
     };
 
@@ -66,11 +67,11 @@ const CreditCardSection = () => {
     };
 
     const handleDelete = async (cardId) => {
-        console.log('Attempting to delete card with ID:', cardId); // บันทึก ID ของการ์ดเพื่อตรวจสอบว่าได้กำหนดไว้หรือไม่
+        console.log('Attempting to delete card with ID:', cardId);
         if (!cardId) {
-            console.error('Attempt to delete card with undefined ID'); // บันทึกข้อผิดพลาดหาก ID ไม่ได้กำหนดไว้
-            setError('Card ID is undefined');
-            return; // คืนค่าก่อนหาก ID ไม่ได้กำหนดไว้
+            console.error('Attempt to delete card with undefined ID');
+            setError('Cannot delete card: Missing card ID');
+            return;
         }
         setIsLoading(true);
         setError(null);
@@ -84,8 +85,21 @@ const CreditCardSection = () => {
             setIsLoading(false);
         }
     };
+
     const handleEdit = (card) => {
-        setEditingCard(card);
+        console.log('Editing card:', card);
+        if (!card || !card._id) {
+            console.error('Attempt to edit card with missing data');
+            setError('Cannot edit card: Missing card data');
+            return;
+        }
+        setEditingCard({
+            _id: card._id,
+            cardNumber: card.cardNumber || '',
+            expiryDate: card.expiryDate || '',
+            accountHolderName: card.accountHolderName || '',
+            type: 'Credit Card'
+        });
         setShowForm(true);
         setError(null);
     };
@@ -117,12 +131,12 @@ const CreditCardSection = () => {
             {cards.length > 0 && (
                 <ul className="divide-y divide-gray-200">
                     {cards.map((card) => (
-                        <li key={card._id || card.lastFourDigits} className="py-4 flex items-center justify-between">
+                        <li key={card._id} className="py-4 flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                                 <CreditCard className="h-8 w-8 text-purple-500" />
                                 <div className="min-w-0">
                                     <p className="text-sm font-medium text-gray-900 truncate">
-                                        **** **** **** {card.lastFourDigits} {/* Show last four digits */}
+                                        **** **** **** {card.lastFourDigits}
                                     </p>
                                     <p className="text-sm text-gray-500 truncate">
                                         {card.accountHolderName || 'Unnamed Cardholder'}
@@ -135,7 +149,7 @@ const CreditCardSection = () => {
                                     className="text-blue-500 hover:text-blue-700"
                                     disabled={isLoading}
                                 >
-                                    Edit
+                                    <Edit className="h-5 w-5" />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(card._id)}

@@ -11,10 +11,6 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        fetchBankAccounts();
-    }, []);
-
     const fetchBankAccounts = async () => {
         setIsLoading(true);
         try {
@@ -31,6 +27,11 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        fetchBankAccounts();
+    }, []);
+
 
     const handleSavePaymentMethod = async (data) => {
         try {

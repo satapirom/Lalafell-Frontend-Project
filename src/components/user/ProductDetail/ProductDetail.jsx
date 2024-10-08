@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -7,10 +8,12 @@ import { Pagination } from 'swiper/modules';
 import { BsFillCartFill, BsStar, BsStarFill, BsPlusLg, BsDashLg } from 'react-icons/bs';
 import axiosInstance from '../../../utils/axiosInstance';
 import { useAuth } from '../../../contexts/AuthContext';
+import { createCart } from '../../../services/cartServices';
 
 const ProductDetail = () => {
     const { id } = useParams();
     const { isLoggedIn, user } = useAuth();
+    const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [comment, setComment] = useState('');
     const [userRating, setUserRating] = useState(0);
@@ -85,6 +88,46 @@ const ProductDetail = () => {
     const toggleDescription = () => {
         setIsExpanded(!isExpanded);
     };
+
+    const handleAddToCart = async () => {
+        if (!isLoggedIn) {
+            setError('Please log in to add items to your cart.');
+            return;
+        }
+
+        try {
+            const cartData = {
+                productId: id,
+                quantity: quantity
+            };
+            const response = await createCart(cartData);
+            console.log('Item added to cart:', response);
+            // You might want to show a success message or update the UI here
+        } catch (error) {
+            console.error('Error adding item to cart:', error);
+            setError(error.message || 'An error occurred while adding the item to your cart.');
+        }
+    };
+
+    const handleProceedToCheckout = () => {
+        if (!isLoggedIn) {
+            setError('Please log in to proceed to checkout.');
+            return;
+        }
+
+        const selectedCartItem = {
+            product: {
+                _id: product._id,
+                name: product.name,
+                price: product.price,
+                images: product.images
+            },
+            quantity: quantity
+        };
+
+        navigate('/checkout', { state: { selectedCartItems: [selectedCartItem] } });
+    };
+
 
     if (isLoading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -179,11 +222,16 @@ const ProductDetail = () => {
                         </div>
 
                         <div className="flex space-x-4">
-                            <button className="flex-1 bg-[#E9E4D6] hover:bg-gray-200 text-gray-800 p-3 rounded-lg flex justify-center items-center space-x-2">
+                            <button
+                                className="flex-1 bg-[#E9E4D6] hover:bg-gray-200 text-gray-800 p-3 rounded-lg flex justify-center items-center space-x-2"
+                                onClick={handleAddToCart}
+                            >
                                 <BsFillCartFill />
                                 <span>Add to Cart</span>
                             </button>
-                            <button className="flex-1 bg-black hover:bg-gray-800 text-white p-3 rounded-lg flex justify-center items-center">
+                            <button
+                                onClick={handleProceedToCheckout}
+                                className="flex-1 bg-black hover:bg-gray-800 text-white p-3 rounded-lg flex justify-center items-center">
                                 <span>Buy Now</span>
                             </button>
                         </div>

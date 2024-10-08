@@ -35,6 +35,7 @@ const Navbar = () => {
                             <IconSearch />
                             <IconCarts />
                             <IconProfile
+                                onClose={() => setIsOpen(false)}
                             />
                         </div>
                     </div>

@@ -18,6 +18,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
         phone: '',
         street: '',
         city: '',
+        state: '',
         postalCode: '',
         country: '',
         isDefault: false,
@@ -61,11 +62,12 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
                 />
                 <input
-                    type="text"
+                    type="number"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                     placeholder="Phone"
+                    maxLength={10}
                     required
                     className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
                 />
@@ -74,7 +76,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     name="street"
                     value={formData.street}
                     onChange={handleChange}
-                    placeholder="Street"
+                    placeholder="Address"
                     required
                     className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
                 />
@@ -86,6 +88,14 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     placeholder="City"
                     required
                     className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                />
+                <input
+                    type="text"
+                    name="state"
+                    value={formData.state}
+                    onChange={handleChange}
+                    placeholder="State"
+                    required
                 />
                 <input
                     type="text"
@@ -126,6 +136,5 @@ const AddressForm = ({ address, onSave, onCancel }) => {
 };
 
 export default AddressForm;
-
 
 

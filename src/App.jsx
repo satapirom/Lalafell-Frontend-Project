@@ -10,20 +10,26 @@ import Product from './pages/user/Product.jsx';
 import Profile from './pages/user/Profile.jsx';
 import ProductDetail from './components/user/ProductDetail/ProductDetail.jsx';
 import Settings from './pages/user/Settings.jsx';
+import Checkout from './pages/user/Checkout.jsx';
+import AddToCartPage from './pages/user/AddToCartPage.jsx';
+import OrderedStatePage from './pages/user/OrderedStatePage.jsx';
+import CartPage from './pages/user/CartPage.jsx';
+import DeliveryAddressManagement from './components/user/Checkout/DeliveryAddressManagement.jsx';
+import SelectPaymethod from './components/user/Checkout/SelectPayMethod.jsx';
+import OrderSuccess from './components/user/Checkout/OrderSuccess.jsx';
 
 // admin
 import AddProducts from './pages/admin/AddProducts.jsx';
 import Card from './components/user/OurProduct/Card.jsx';
 
 
-
 function App() {
   return (
-    <AuthProvider>
-      <Router>
+    <Router> {/* ห่อ Router ก่อน */}
+      <AuthProvider>
         <MainApp />
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 }
 
@@ -46,6 +52,13 @@ function MainApp() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path='/cart' element={<AddToCartPage />} />
+        <Route path='/ordered' element={<OrderedStatePage />} />
+        <Route path='/cartpage' element={<CartPage />} />
+        <Route path='/address' element={<DeliveryAddressManagement />} />
+        <Route path='/paymethod' element={<SelectPaymethod />} />
+        <Route path='/order-confirmation' element={<OrderSuccess />} />
 
 
 
@@ -61,5 +74,6 @@ function MainApp() {
 }
 
 export default App;
+
 
 
