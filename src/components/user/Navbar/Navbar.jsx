@@ -1,42 +1,46 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import IconSearch from './IconSearch';
 import IconProfile from './IconProfile';
 import IconCarts from '../Navbar/IconCarst';
 import Sidebar from '../Sidebar/Sidebar';
 import useAuthForNavigate from '../../../hooks/user/useAuthForNavigate';
-import { Link } from 'react-router-dom';
+import Logo from '../Banner/Logo';
+
+const MenuIcon = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ffffff"} fill={"none"}>
+        <path d="M4 5L20 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M4 12L20 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M4 19L20 19" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-    // ปรับการ destructure เป็น object
-    const { isLoggedIn, setIsLoggedIn, login, logout } = useAuthForNavigate();
+    const { isLoggedIn, setIsLoggedIn } = useAuthForNavigate();
 
     return (
-        <div className="relative z-100 shadow-lg rounded-b-3xl bg-white">
-            <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-md">
+        <div className="relative z-100">
+            <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-lg rounded-b-3xl">
                 <div className="container mx-auto max-w-screen-laptopl px-4 py-4">
                     <div className="flex justify-between items-center">
-                        <div className="flex items-center space-x-2">
-                            <img
+                        <div className="flex items-center space-x-4">
+                            <div
                                 onClick={() => setIsOpen(!isOpen)}
-                                src='/images/icon-menu.svg'
-                                className='cursor-pointer h-7 w-7 tablet:h-8 tablet:w-8 laptop:h-10 laptop:w-10'
-                                alt="Menu"
-                            />
+                                className="cursor-pointer bg-yellow-400 p-3 rounded-full shadow-md hover:bg-yellow-300 transition-colors duration-300 transform hover:scale-110"
+                            >
+                                <MenuIcon />
+                            </div>
                             <div className="flex flex-1 justify-center items-center">
-                                <Link to="/">
-                                    <h2 className='text-lg tablet:text-xl laptop:text-2xl font-bold text-gray-800'>
-                                        Lalafell
-                                    </h2>
+                                <Link to="/" className="transform hover:scale-110 transition-transform duration-300">
+                                    <Logo />
                                 </Link>
                             </div>
                         </div>
-                        <div className="flex space-x-4 items-center">
-                            <IconSearch />
-                            <IconCarts />
-                            <IconProfile
-                                onClose={() => setIsOpen(false)}
-                            />
+                        <div className="flex space-x-6 items-center">
+                            <IconSearch className="text-white hover:text-yellow-300 transition-colors duration-300 transform hover:scale-110" />
+                            <IconCarts className="text-white hover:text-yellow-300 transition-colors duration-300 transform hover:scale-110" />
+                            <IconProfile onClose={() => setIsOpen(false)} className="text-white hover:text-yellow-300 transition-colors duration-300 transform hover:scale-110" />
                         </div>
                     </div>
                 </div>
@@ -46,8 +50,6 @@ const Navbar = () => {
                         className="fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity duration-300"
                     />
                 )}
-
-                {/* ส่ง isLoggedIn และ setIsLoggedIn ไปที่ Sidebar */}
                 <Sidebar
                     isOpen={isOpen}
                     onClose={() => setIsOpen(false)}
@@ -60,4 +62,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
 

@@ -17,6 +17,9 @@ import CartPage from './pages/user/CartPage.jsx';
 import DeliveryAddressManagement from './components/user/Checkout/DeliveryAddressManagement.jsx';
 import SelectPaymethod from './components/user/Checkout/SelectPayMethod.jsx';
 import OrderSuccess from './components/user/Checkout/OrderSuccess.jsx';
+import { WishlistProvider } from './contexts/WishlistContext.jsx';
+import WishlistPage from './components/user/Products/WishlistPage.jsx';
+import OrderDashboard from './components/user/Order/OrderDashboard.jsx';
 
 // admin
 import AddProducts from './pages/admin/AddProducts.jsx';
@@ -27,7 +30,9 @@ function App() {
   return (
     <Router> {/* ห่อ Router ก่อน */}
       <AuthProvider>
-        <MainApp />
+        <WishlistProvider>
+          <MainApp />
+        </WishlistProvider>
       </AuthProvider>
     </Router>
   );
@@ -59,6 +64,9 @@ function MainApp() {
         <Route path='/address' element={<DeliveryAddressManagement />} />
         <Route path='/paymethod' element={<SelectPaymethod />} />
         <Route path='/order-confirmation' element={<OrderSuccess />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
+        <Route path='/orderlist' element={<OrderDashboard />} />
+
 
 
 
@@ -68,7 +76,7 @@ function MainApp() {
       </Routes>
 
       {/* แสดง Footer ก็ต่อเมื่อไม่ใช่เส้นทาง Register หรือ Login */}
-      {/* {!noFooterPaths.includes(location.pathname) && <Footer />} */}
+      {!noFooterPaths.includes(location.pathname) && <Footer />}
     </>
   );
 }

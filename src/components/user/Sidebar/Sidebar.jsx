@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../../contexts/AuthContext"; // ปรับ path ตามที่คุณใช้
 import { useState, useEffect } from "react";
 import axiosInstance from "../../../utils/axiosInstance";
+import OrderBox from "./OrderBox";
 
 const Sidebar = ({ isOpen, onClose }) => {
     const { isLoggedIn, logout } = useAuth();
@@ -28,6 +29,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         onClose();
     };
 
+
     return (
         <div className={`fixed top-0 left-0 w-80 transform h-full bg-black/90 text-white shadow-lg p-6 transition-transform duration-300 z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
             <div className="relative">
@@ -39,7 +41,10 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </button>
                 <div className="flex flex-col space-y-6">
                     <div className="flex items-center space-x-3 mb-4">
-                        <span className="text-2xl font-semibold">Lalafell Keyboard</span>
+                        <Link to="/"
+                            onClick={onClose}>
+                            <span className="text-2xl font-semibold">Lalafell Keyboard</span>
+                        </Link>
                     </div>
 
                     <ul className="space-y-4">
@@ -53,7 +58,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                             onClick={onClose}
                             className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
                             <FaShoppingCart size={22} />
-                            <span className="text-lg">Products</span>
+                            <span className="text-lg">Shoping</span>
                         </Link>
 
                         {/* เมนูสำหรับผู้ใช้ที่ยังไม่ได้ล็อกอิน */}
@@ -83,17 +88,18 @@ const Sidebar = ({ isOpen, onClose }) => {
                                     <FaUser size={22} />
                                     <span className="text-lg">Profile</span>
                                 </Link>
-                                <li
-
+                                <Link to="/wishlist"
+                                    onClick={onClose}
                                     className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
                                     <FaHeart size={22} />
                                     <span className="text-lg">Wishlist</span>
-                                </li>
-                                <li
-
-                                    className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
-                                    <FaBoxOpen size={22} />
-                                    <span className="text-lg">Orders</span>
+                                </Link>
+                                <li>
+                                    <Link to="/cartpage"
+                                        onClick={onClose}
+                                        className="flex items-center text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors">
+                                        <OrderBox />
+                                    </Link>
                                 </li>
                                 <li
                                     className="flex items-center space-x-3 text-white hover:text-gray-700 hover:bg-[#E9E4D6] p-3 rounded-lg cursor-pointer transition-colors" onClick={handleLogout}>

@@ -1,19 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import FavoriteButton from './FavoriteButton';
-import Rating from './Rating';
+import { AiFillStar } from 'react-icons/ai';
 import { BsFillCartFill } from 'react-icons/bs';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import FavoriteButton from './FavoriteButton';
+import { getReviews } from '../../../services/reviweServices';
+import { useWishlist } from '../../../contexts/WishlistContext';
 
 const ProductCard = ({ product }) => {
-    const [isFavorited, setIsFavorited] = useState(false);
     const [isExpanded, setIsExpanded] = useState(false);
+    const [reviews, setReviews] = useState([]);
     const navigate = useNavigate();
+    const { wishlist } = useWishlist();
 
-    const toggleFavorite = () => {
-        setIsFavorited(!isFavorited);
-    };
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try {
+                const response = await getReviews(product._id);
+                setReviews(response);
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                setReviews([]);
+            }
+        };
+        fetchReviews();
+    }, [product._id]);
+
+    const averageRating = useMemo(() => {
+        const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
+        return reviews.length ? totalRating / reviews.length : 0;
+    }, [reviews]);
 
     const toggleDescription = () => {
         setIsExpanded(!isExpanded);
@@ -26,8 +43,8 @@ const ProductCard = ({ product }) => {
     return (
         <div className="bg-white rounded-xl shadow-lg p-4 relative max-w-xs mx-auto my-4 flex flex-col">
             <FavoriteButton
-                onClick={toggleFavorite}
-                isFavorited={isFavorited}
+                productId={product._id}
+                isFavorited={wishlist.has(product._id)}
             />
 
             <Swiper
@@ -40,7 +57,7 @@ const ProductCard = ({ product }) => {
                     product.images.map((img, index) => (
                         <SwiperSlide key={index}>
                             <img
-                                src={img.url}
+                                src={img.url || 'fallback-image-url.jpg'}
                                 alt={`Product Image ${index + 1}`}
                                 className="w-full h-full object-cover rounded-xl"
                             />
@@ -77,7 +94,18 @@ const ProductCard = ({ product }) => {
                     </button>
                 )}
             </div>
-            <Rating rating={product.rating} reviews={product.reviews} />
+
+            <div className="flex items-center mb-4 px-4 hover:cursor-pointer">
+                {[...Array(5)].map((_, i) => (
+                    <AiFillStar
+                        key={i}
+                        className={i < Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'}
+                        size={20}
+                    />
+                ))}
+                <span className="ml-2 text-gray-500">({reviews.length})</span>
+            </div>
+
             <button
                 onClick={handleBuyNow}
                 className="w-full hover:bg-black hover:text-white text-gray-700 bg-[#E9E4D6] p-3 py-2 rounded-lg flex justify-center items-center space-x-2 mt-auto"
@@ -90,6 +118,10 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
+
+
+
+
 
 
 

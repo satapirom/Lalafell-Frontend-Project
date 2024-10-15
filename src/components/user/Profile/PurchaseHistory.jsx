@@ -33,8 +33,8 @@ const PurchaseHistory = () => {
     return (
         <div className="p-6 bg-gray-50 rounded-lg ">
             {purchaseHistory.length > 1 && (
-                <Link to="/purchase-history" className="text-xl text-gray-800 font-bold hover:text-blue-600">
-                    View Purchase History
+                <Link to="/orderlist" className="text-xl text-gray-800 font-bold hover:text-blue-600">
+                    View Purchase
                 </Link>
             )}
             {recentHistory.length > 0 ? (

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import ProductCard from '../Products/ProductCard';
 import axiosInstance from '../../../utils/axiosInstance';
 import useToggle from '../../../hooks/user/useToggle';
@@ -16,12 +17,19 @@ const ProductDisplay = () => {
     const { isOpen: isSizeOpen, toggle: toggleSize, onClose: onCloseSize } = useToggle();
     const { isOpen: isCategoryOpen, toggle: toggleCategory, onClose: onCloseCategory } = useToggle();
 
+    const location = useLocation();
+    const searchQuery = new URLSearchParams(location.search).get('search') || '';
+
     const fetchProducts = useCallback(async () => {
         setLoading(true);
         try {
-            console.log(`Fetching products with sort: ${sortOption}, size: ${selectedSize}, category: ${selectedCategory}`);
+            console.log(`Fetching products with sort: ${sortOption}, size: ${selectedSize}, category: ${selectedCategory}, search: ${searchQuery}`);
             const response = await axiosInstance.get(`/products`, {
-                params: { size: selectedSize, category: selectedCategory }
+                params: {
+                    size: selectedSize,
+                    category: selectedCategory,
+                    search: searchQuery
+                }
             });
             const fetchedProducts = response.data.products;
             console.log('Fetched products:', fetchedProducts);
@@ -35,7 +43,7 @@ const ProductDisplay = () => {
         } finally {
             setLoading(false);
         }
-    }, [selectedSize, selectedCategory, sortOption]);
+    }, [selectedSize, selectedCategory, sortOption, searchQuery]);
 
     useEffect(() => {
         fetchProducts();

@@ -1,3 +1,4 @@
+import React from 'react';
 import { AiFillStar } from 'react-icons/ai';
 
 const Rating = ({ rating, reviews }) => {
@@ -6,13 +7,15 @@ const Rating = ({ rating, reviews }) => {
             {[...Array(5)].map((_, i) => (
                 <AiFillStar
                     key={i}
-                    className={i < rating ? 'text-yellow-500' : 'text-gray-300'}
+                    className={i < Math.round(rating) ? 'text-yellow-400' : 'text-gray-300'}
                     size={20}
                 />
             ))}
-            <span className="ml-2 text-gray-500">({reviews})</span>
+            <span className="ml-2 text-gray-500">({reviews.length})</span>
         </div>
     );
 };
 
 export default Rating;
+
+

@@ -29,24 +29,41 @@ const updateLocalStorageAndNotify = (cartData) => {
 
 export const createCart = async (data) => {
     const response = await handleApiCall('post', API_ENDPOINTS.USER_CART, data);
-    updateLocalStorageAndNotify(response.cart);
+    if (response.cart) {
+        updateLocalStorageAndNotify(response.cart);
+    }
     return response;
 };
 
 export const getCart = async () => {
     const response = await handleApiCall('get', API_ENDPOINTS.USER_CART);
-    updateLocalStorageAndNotify(response.cart);
+    if (response.cart) {
+        updateLocalStorageAndNotify(response.cart);
+    }
     return response;
 };
 
 export const updateCart = async (productId, data) => {
     const response = await handleApiCall('patch', `${API_ENDPOINTS.USER_CART}/${productId}`, data);
-    updateLocalStorageAndNotify(response.cart);
+    if (response.cart) {
+        updateLocalStorageAndNotify(response.cart);
+    }
     return response;
 };
 
 export const deleteCart = async (productId) => {
     const response = await handleApiCall('delete', `${API_ENDPOINTS.USER_CART}/${productId}`);
-    updateLocalStorageAndNotify(response.cart);
+    if (response.cart) {
+        updateLocalStorageAndNotify(response.cart);
+    }
     return response;
 };
+
+export const clearSelectedItems = async (productId) => {
+    const response = await handleApiCall('delete', `${API_ENDPOINTS.USER_CART}/${productId}`);
+    if (response.cart) {
+        updateLocalStorageAndNotify(response.cart);
+    }
+    return response;
+};
+
