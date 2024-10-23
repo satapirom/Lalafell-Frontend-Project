@@ -1,18 +1,19 @@
-import React from 'react'
+import React from 'react';
+import CustomSelect from '../../ui/CustomSelect.jsx';
 
 const SortBy = ({ sortOption, setSortOption }) => {
     return (
-        <div>
+        <div className="flex items-center  bg-white/50 hover:bg-primary-color/10 px-4 py-1 rounded-full">
             <label className="mr-2">Sort by:</label>
-            <select
-                className="border rounded-md py-1 px-4"
+            <CustomSelect
+                options={[
+                    { label: "Price", value: "price" },
+                    { label: "Popularity", value: "popularity" },
+                    { label: "Newest", value: "newest" },
+                ]}
                 value={sortOption}
-                onChange={(e) => setSortOption(e.target.value)}
-            >
-                <option value="price">Price</option>
-                <option value="popularity">Popularity</option>
-                <option value="newest">Newest</option>
-            </select>
+                onChange={setSortOption}
+            />
         </div>
     )
 }

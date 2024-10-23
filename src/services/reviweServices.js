@@ -26,3 +26,18 @@ export const getReviews = async (productId) => {
     const response = await handleApiCall('get', API_ENDPOINTS.REVIEWS(productId));
     return response;
 };
+
+export const createReview = async (productId, data) => {
+    const response = await handleApiCall('post', API_ENDPOINTS.REVIEWS(productId), data);
+    return response;
+};
+
+export const updateReview = async (productId, reviewId, data) => {
+    const response = await handleApiCall('patch', `${API_ENDPOINTS.REVIEWS(productId)}/${reviewId}`, data);
+    return response;
+};
+
+export const deleteReview = async (productId, reviewId) => {
+    const response = await handleApiCall('delete', `${API_ENDPOINTS.REVIEWS(productId)}/${reviewId}`);
+    return response;
+};

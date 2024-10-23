@@ -5,6 +5,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import DeliveryAddress from '../../components/user/Checkout/DeliveryAddress';
 import PaymentCheckout from '../../components/user/Checkout/PaymentChackout';
 import useAddress from '../../hooks/user/useAddress';
+import YouMayAlsoLike from '../../components/user/YouMayAlsoLike/YouMayAlsoLike';
+
 
 const Checkout = () => {
     const location = useLocation();
@@ -12,7 +14,6 @@ const Checkout = () => {
     const { user } = useAuth();
     const selectedItems = location.state?.selectedCartItems || [];
     const [cart, setCart] = useState({ items: [], totalAmount: 0, totalQuantity: 0 });
-
 
     const { selectedAddress, defaultAddress } = useAddress();
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -25,17 +26,17 @@ const Checkout = () => {
         }
     }, []);
 
-    // Function to clear the cart from localStorage
     const clearCart = () => {
         try {
-            // ถ้าไม่จำเป็นต้องใช้ setCart อาจลบส่วนนี้ออก
-            setCart({ items: [], totalAmount: 0, totalQuantity: 0 }); // ต้องแน่ใจว่า setCart มีการกำหนดไว้ในคอมโพเนนต์นี้
+            // Clear cart state
+            setCart({ items: [], totalAmount: 0, totalQuantity: 0 });
+
+            // Clear the cart in localStorage
+            localStorage.removeItem('cart'); // Make sure to clear the cart from localStorage as well
         } catch (error) {
             console.error("Error clearing cart:", error);
         }
     };
-
-
 
     const handlePlaceOrder = async () => {
         setError(null);
@@ -74,8 +75,7 @@ const Checkout = () => {
             if (response && response.order) {
                 console.log('Order created successfully:', response);
 
-                // Clear cart and navigate to confirmation page
-                clearCart(); // Call clearCart function here
+                clearCart();
                 navigate('/order-confirmation', { state: { orderId: response.order._id } });
             } else {
                 console.error('Order creation failed:', response);
@@ -86,52 +86,81 @@ const Checkout = () => {
         }
     };
 
+    const handleCancelOrder = () => {
+        // Clear the cart and navigate to another page or reset the state
+        clearCart();
+        navigate('/'); // Navigate to the homepage or any other desired page
+    };
+
     const calculateTotal = () => {
         return selectedItems.reduce((total, item) => total + item.product.price * item.quantity, 0);
     };
 
+    const calculateTotalQuantity = () => {
+        return selectedItems.reduce((total, item) => total + item.quantity, 0);
+    };
+
     return (
-        <div className="container mx-auto px-4 py-8 bg-gray-100 min-h-screen">
-            <h1 className="text-4xl font-bold mb-8 text-gray-800">Checkout</h1>
-
-            <DeliveryAddress />
-
-            <div className="mb-8">
-                <h2 className="text-2xl font-semibold mb-4 text-gray-800">Selected Items</h2>
-                {selectedItems.length === 0 ? (
-                    <p className="text-lg text-gray-600">No items selected.</p>
-                ) : (
-                    <div className="bg-white p-4 rounded-lg shadow-md">
-                        {selectedItems.map((item) => (
-                            <div key={item.product._id} className="flex justify-between mb-4">
-                                <div className="flex items-center">
-                                    <img
-                                        src={item.product.images[0]?.url}
-                                        alt={item.product.name}
-                                        className="w-16 h-16 object-cover rounded-md mr-4"
-                                    />
-                                    <div>
-                                        <h3 className="text-lg font-semibold text-gray-800">{item.product.name}</h3>
-                                        <p className="text-gray-600 text-lg">{item.product.price.toFixed(2)} USD</p>
+        <div className="container mx-auto mt-20">
+            <h1 className="text-3xl font-semibold text-gray-800 mb-4">Checkout</h1>
+            <div className='custom-bg mt-8 p-8 rounded-lg'>
+                <h2 className="text-lg font-normal pb-6">Items Detail</h2>
+                <div className="custom-glassmorphism shadow-sm">
+                    {selectedItems.length === 0 ? (
+                        <p className="text-lg text-gray-600">No items selected.</p>
+                    ) : (
+                        <div className="px-8">
+                            {selectedItems.map((item) => (
+                                <div key={item.product._id} className="items-center border-b border-gray-200 py-4 pr-8 rounded-lg transition duration-150 hover:bg-gray-50">
+                                    <div className="flex justify-between mb-4">
+                                        <div className="flex items-center">
+                                            <img
+                                                src={item.product.images[0]?.url}
+                                                alt={item.product.name}
+                                                className="w-16 h-16 object-cover rounded-md mr-4"
+                                            />
+                                            <div>
+                                                <h3 className="text-lg font-semibold text-gray-800">{item.product.name}</h3>
+                                                <p className="text-gray-600 text-lg">฿ {item.product.price.toFixed(2)}</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <span className="mx-2 text-lg font-normal bg-primary-color/15 py-2 px-4 rounded-full">x {item.quantity}</span>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="flex items-center">
-                                    <span className="mx-2 text-lg font-semibold">x {item.quantity}</span>
+                            ))}
+
+                            {/* รวมรายการสรุปของออเดอร์ */}
+                            <div className="my-8 mr-6">
+                                <div className="flex justify-between text-lg mb-2">
+                                    <span className="text-gray-800">Total Quantity:</span>
+                                    <span className="text-gray-800">{calculateTotalQuantity()}</span>
+                                </div>
+                                <div className="flex justify-between text-lg">
+                                    <span className="text-gray-800">Total Price:</span>
+                                    <span className="text-gray-800">฿ {calculateTotal().toFixed(2)}</span>
                                 </div>
                             </div>
-                        ))}
-                    </div>
-                )}
-                <div className="bg-white p-4 rounded-lg shadow-md mt-4">
-                    <h2 className="text-2xl font-semibold mb-4 text-gray-800">Order Summary</h2>
-                    <div className="flex justify-between text-lg mb-4">
-                        <span className="text-gray-800">Total:</span>
-                        <span className="text-gray-800">{calculateTotal().toFixed(2)} USD</span>
-                    </div>
+                        </div>
+                    )}
+                </div>
+                <div className="flex justify-end space-x-2">
+                    <button
+                        onClick={handleCancelOrder} // เพิ่มฟังก์ชันการยกเลิก
+                        className="border border-primary-color text-gray-800 hover:text-white px-6 py-3 rounded-md hover:bg-primary-color/70 transition duration-300 mt-8 ml-4">
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handlePlaceOrder}
+                        className="bg-primary-color text-white px-6 py-3 rounded-md hover:bg-primary-color/80 transition duration-300 mt-8">
+                        Confirm Order
+                    </button>
                 </div>
             </div>
-
+            <DeliveryAddress />
             <PaymentCheckout />
+            <YouMayAlsoLike />
 
             {error && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -139,12 +168,6 @@ const Checkout = () => {
                     <span className="block sm:inline"> {error}</span>
                 </div>
             )}
-
-            <button
-                onClick={handlePlaceOrder}
-                className="bg-blue-500 text-white px-6 py-3 rounded-md hover:bg-blue-600 transition duration-300 mt-8 w-full">
-                Confirm Order
-            </button>
         </div>
     );
 };

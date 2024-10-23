@@ -11,18 +11,17 @@ const Logo = () => {
     return (
         <Link to="/" >
             <div
-                className="relative w-28 h-10 rounded-full bg-[#2727E6] overflow-hidden cursor-pointer transition-all duration-300 ease-in-out"
+                className="relative w-28 h-10 rounded-md bg-primary-color overflow-hidden cursor-pointer transition-all duration-300 ease-in-out"
             >
-                <div className="absolute inset-0 flex items-center justify-center nerko-one-regular text-white font-bold text-xl mx-2 ">
-                    <span className="animate-pulse custom-font-logo mr-2">{icon}</span>
-                    <span className="animate-bounce custom-font-logo">L</span>
-                    <span className="animate-pulse custom-font-logo">a</span>
-                    <span className="animate-bounce custom-font-logo">l</span>
-                    <span className="animate-bounce custom-font-logo">a</span>
-                    <span className="animate-bounce custom-font-logo">f</span>
-                    <span className="animate-pulse custom-font-logo">e</span>
-                    <span className="animate-bounce custom-font-logo">l</span>
-                    <span className="animate-pulse custom-font-logo">l</span>
+                <div className="absolute inset-0 flex items-center justify-center  text-white font-bold text-xl mx-2 ">
+                    <span className="animate-bounce ">L</span>
+                    <span className="animate-pulse">a</span>
+                    <span className="animate-bounce">l</span>
+                    <span className="animate-bounce">a</span>
+                    <span className="animate-bounce">f</span>
+                    <span className="animate-pulse">e</span>
+                    <span className="animate-bounce">l</span>
+                    <span className="animate-pulse">l</span>
                 </div>
             </div>
         </Link>

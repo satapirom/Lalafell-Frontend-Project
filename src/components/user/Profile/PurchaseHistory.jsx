@@ -31,22 +31,30 @@ const PurchaseHistory = () => {
     };
 
     return (
-        <div className="p-6 bg-gray-50 rounded-lg ">
+        <div className="p-8 custom-bg rounded-lg ">
             {purchaseHistory.length > 1 && (
-                <Link to="/orderlist" className="text-xl text-gray-800 font-bold hover:text-blue-600">
-                    View Purchase
-                </Link>
+                <div className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" color="#000000" fill="none">
+                        <path d="M2.5 12C2.5 7.52166 2.5 5.28249 3.89124 3.89124C5.28249 2.5 7.52166 2.5 12 2.5C16.4783 2.5 18.7175 2.5 20.1088 3.89124C21.5 5.28249 21.5 7.52166 21.5 12C21.5 16.4783 21.5 18.7175 20.1088 20.1088C18.7175 21.5 16.4783 21.5 12 21.5C7.52166 21.5 5.28249 21.5 3.89124 20.1088C2.5 18.7175 2.5 16.4783 2.5 12Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+                        <path d="M11 7.5H17M8 7.5C8 7.77614 7.77614 8 7.5 8C7.22386 8 7 7.77614 7 7.5C7 7.22386 7.22386 7 7.5 7C7.77614 7 8 7.22386 8 7.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M11 12H17M8 12C8 12.2761 7.77614 12.5 7.5 12.5C7.22386 12.5 7 12.2761 7 12C7 11.7239 7.22386 11.5 7.5 11.5C7.77614 11.5 8 11.7239 8 12Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M11 16.5H17M8 16.5C8 16.7761 7.77614 17 7.5 17C7.22386 17 7 16.7761 7 16.5C7 16.2239 7.22386 16 7.5 16C7.77614 16 8 16.2239 8 16.5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <Link to="/orderlist" className="text-xl font-bold hover:text-primary-color ">
+                        View Purchase
+                    </Link>
+                </div>
             )}
             {recentHistory.length > 0 ? (
                 <ul>
                     {recentHistory.map((history) => (
                         <li key={history.id} className="mb-4 mt-6">
-                            <div className="flex items-center bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-gray-200 flex">
+                            <div className="flex items-center custom-galssmorpuism shadow-sm p-4 rounded-lg  transition-shadow border ">
                                 {/* แสดงรูปภาพของสินค้า */}
                                 <img
                                     src={history.Images}
                                     alt={history.name}
-                                    className="w-20 h-20 rounded-full object-cover mb-4 tablet:w-24 tablet:h-24 laptop:w-24 laptop:h-24 desktop:w-24 desktop:h-24 laptopl:w-24 laptopl:h-24 mr-4" // ปรับขนาดรูปภาพที่นี่
+                                    className="w-20 h-20 rounded-lg object-cover mb-4 tablet:w-24 tablet:h-24 laptop:w-24 laptop:h-24 desktop:w-24 desktop:h-24 laptopl:w-24 laptopl:h-24 mr-4" // ปรับขนาดรูปภาพที่นี่
                                 />
                                 <div className="flex flex-col flex-1">
                                     {/* เงื่อนไขสำหรับ mobile */}
@@ -56,11 +64,24 @@ const PurchaseHistory = () => {
                                     <div className="hidden tablet:block"> {/* ซ่อนข้อมูลในมือถือ */}
                                         {/* รายละเอียด */}
                                         <p className="text-gray-600">
-                                            <span className="font-medium text-md tablet:text-lg laptop:text-lg desktop:text-lg laptopl:text-lg">Price:</span> ${history.price ? history.price.toFixed(2) : 'N/A'}
+                                            <span
+                                                className="text-md tablet:text-lg laptop:text-lg desktop:text-lg laptopl:text-lg">
+                                                Price:
+                                            </span>
+                                            ${history.price ? history.price.toFixed(2) : 'N/A'}
                                             &nbsp;|&nbsp;
-                                            <span className="font-medium text-md tablet:text-lg laptop:text-lg desktop:text-lg laptopl:text-lg">Quantity:</span> {history.quantity || 'N/A'}
+                                            <span
+                                                className=" text-md tablet:text-lg laptop:text-lg desktop:text-lg laptopl:text-lg">
+                                                Quantity:
+                                            </span>
+                                            {history.quantity || 'N/A'}
+
                                             &nbsp;|&nbsp;
-                                            <span className="font-medium text-md tablet:text-lg laptop:text-lg desktop:text-lg laptopl:text-lg">Total:</span> ${history.total ? history.total.toFixed(2) : 'N/A'}
+                                            <span
+                                                className=" text-md tablet:text-lg laptop:text-lg desktop:text-lg laptopl:text-lg">
+                                                Total:
+                                            </span>
+                                            ${history.total ? history.total.toFixed(2) : 'N/A'}
                                         </p>
                                     </div>
 

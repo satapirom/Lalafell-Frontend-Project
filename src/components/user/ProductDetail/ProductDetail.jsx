@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
-import { BsFillCartFill, BsStar, BsStarFill, BsPlusLg, BsDashLg } from 'react-icons/bs';
+import { BsPlusLg, BsDashLg } from 'react-icons/bs';
 import axiosInstance from '../../../utils/axiosInstance';
 import { useAuth } from '../../../contexts/AuthContext';
 import { createCart } from '../../../services/cartServices';
+import ReviweProductDetail from './ReviweProductDetail';
+import YouMayAlsoLike from '../../../components/user/YouMayAlsoLike/YouMayAlsoLike';
 
 const ProductDetail = () => {
     const { id } = useParams();
-    const { isLoggedIn, user } = useAuth();
+    const { isLoggedIn } = useAuth();
     const navigate = useNavigate();
     const [product, setProduct] = useState(null);
     const [comment, setComment] = useState('');
     const [userRating, setUserRating] = useState(0);
     const [reviews, setReviews] = useState([]);
-    const [isExpanded, setIsExpanded] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [total, setTotal] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     useEffect(() => {
         const fetchProductAndReviews = async () => {
@@ -36,7 +37,6 @@ const ProductDetail = () => {
                 setReviews(reviewsResponse.data);
                 setIsLoading(false);
             } catch (error) {
-                console.error('Error fetching product and reviews:', error);
                 setError('Failed to load product and reviews');
                 setIsLoading(false);
             }
@@ -71,22 +71,11 @@ const ProductDetail = () => {
                     setError(null);
                 }
             } catch (error) {
-                console.error('Error submitting comment:', error);
-                setError(error.response?.data?.message || 'An error occurred while submitting your review.');
+                setError('An error occurred while submitting your review.');
             }
         } else {
             setError('Please ensure you are logged in, have written a comment, and selected a rating.');
         }
-    };
-
-    const calculateAverageRating = () => {
-        if (!reviews || reviews.length === 0) return 0;
-        const sum = reviews.reduce((acc, curr) => acc + curr.rating, 0);
-        return (sum / reviews.length).toFixed(1);
-    };
-
-    const toggleDescription = () => {
-        setIsExpanded(!isExpanded);
     };
 
     const handleAddToCart = async () => {
@@ -96,16 +85,10 @@ const ProductDetail = () => {
         }
 
         try {
-            const cartData = {
-                productId: id,
-                quantity: quantity
-            };
-            const response = await createCart(cartData);
-            console.log('Item added to cart:', response);
-            // You might want to show a success message or update the UI here
+            const cartData = { productId: id, quantity: quantity };
+            await createCart(cartData);
         } catch (error) {
-            console.error('Error adding item to cart:', error);
-            setError(error.message || 'An error occurred while adding the item to your cart.');
+            setError('An error occurred while adding the item to your cart.');
         }
     };
 
@@ -128,184 +111,151 @@ const ProductDetail = () => {
         navigate('/checkout', { state: { selectedCartItems: [selectedCartItem] } });
     };
 
+    const renderDescription = (description) => {
+        if (!description) return null;
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!product) return <div>Product not found</div>;
+        const points = description.split('\n').filter(point => point.trim());
+        const displayPoints = isExpanded ? points : points.slice(0, 2);
+
+        return (
+            <div className="w-full">
+                <ul className="list-none space-y-2">
+                    {displayPoints.map((point, index) => (
+                        <li key={index} className="flex items-start">
+                            <span className="text-primary-color mr-4 flex-shrink-0">•</span>
+                            <span className="text-gray-600 text-lg flex-1 whitespace-normal" style={{
+                                wordBreak: 'normal',
+                                overflowWrap: 'anywhere'
+                            }}>
+                                {point.trim().replace(/^[•\s-]+/, '')}
+                            </span>
+                        </li>
+                    ))}
+                </ul>
+                {points.length > 1 && (
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="mt-2 text-primary-color hover:text-secondary-color text-lg py-4 "
+                    >
+                        {isExpanded ? 'Show Less' : 'Show More'}
+                    </button>
+                )}
+            </div>
+        );
+    };
+
+    if (isLoading) return <div className="text-center">Loading...</div>;
+    if (error) return <div className="text-center text-red-500">{error}</div>;
+    if (!product) return <div className="text-center">Product not found</div>;
 
     return (
-        <div className="max-w-screen-laptopl mx-auto my-24 bg-white p-6">
-            <div className='rounded-xl shadow-lg'>
-                <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4 p-4">
-                    <div className="col-span-1 w-full h-96">
-                        <Swiper
-                            spaceBetween={10}
-                            slidesPerView={1}
-                            pagination={{ clickable: true }}
-                            modules={[Pagination]}
-                            className="mb-4 w-full h-full rounded-xl overflow-hidden"
-                        >
-                            {Array.isArray(product.images) && product.images.length > 0 ? (
-                                product.images.map((img, index) => (
-                                    <SwiperSlide key={index}>
-                                        <img
-                                            src={img.url}
-                                            alt={`Product Image ${index + 1}`}
-                                            className="w-full h-full object-cover"
-                                        />
-                                    </SwiperSlide>
-                                ))
-                            ) : (
-                                <SwiperSlide>
-                                    <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                                        No Image Available
-                                    </div>
-                                </SwiperSlide>
-                            )}
-                        </Swiper>
-                    </div>
-
-                    <div className="col-span-1 mx-6">
-                        <h1 className="text-xl tablet:text-3xl font-bold text-gray-800 mb-4">{product.name}</h1>
-                        <p className="text-lg tablet:text-xl text-gray-800 mb-4">Price: {product.price} ฿</p>
-                        <p className="text-sm tablet:text-base text-gray-500 mb-2">Stock: {product.stock} items available</p>
-                        <p className="text-sm tablet:text-base text-gray-500 mb-4">Shipping: {product.shippingInfo}</p>
-                        <div className="text-gray-600 mb-6">
-                            {isExpanded ? (
-                                <p>{product.description}</p>
-                            ) : (
-                                <p>{product.description && product.description.length > 100
-                                    ? `${product.description.substring(0, 100)}...`
-                                    : product.description}</p>
-                            )}
-                            {product.description && product.description.length > 100 && (
-                                <button
-                                    className="text-blue-500 text-sm mt-2 underline"
-                                    onClick={toggleDescription}
+        <div className="max-w-screen-laptopl mx-auto pt-20 bg-white">
+            <div>
+                <div className=" custom-bg p-4 tablet:p-8 rounded-lg">
+                    <div className="grid grid-cols-1 tablet:grid-cols-2 items-stretch justify-between bg-white rounded-lg">
+                        <div className='col-span-1 rounded-l-xl overflow-hidden'>
+                            <div className="relative w-full" style={{ paddingBottom: '75%' }}>
+                                <Swiper
+                                    slidesPerView={1}
+                                    pagination={{
+                                        clickable: true,
+                                        bulletClass: 'swiper-pagination-bullet w-4 h-4 bg-black',
+                                        bulletActiveClass: 'swiper-pagination-bullet-active !bg-primary-color w-6 h-6 animate-pulse',
+                                    }}
+                                    modules={[Pagination]}
+                                    className="absolute inset-0 w-full h-full "
                                 >
-                                    {isExpanded ? 'Show Less' : 'Read More'}
-                                </button>
-                            )}
-                        </div>
-
-                        <div className="flex items-center mb-6">
-                            <span className="text-lg tablet:text-xl font-bold mr-2">{calculateAverageRating()}</span>
-                            <div className="flex">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <BsStarFill
-                                        key={star}
-                                        className={`tablet:w-5 tablet:h-5 ${star <= calculateAverageRating() ? 'text-yellow-400' : 'text-gray-300'}`}
-                                    />
-                                ))}
-                            </div>
-                            <span className="ml-2 text-gray-500">({reviews.length} reviews)</span>
-                        </div>
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="flex items-center">
-                                <button
-                                    onClick={() => handleQuantityChange(-1)}
-                                    className="bg-gray-200 px-2 py-2 rounded-l"
-                                >
-                                    <BsDashLg />
-                                </button>
-                                <span className="bg-gray-100 px-4 py-1">{quantity}</span>
-                                <button
-                                    onClick={() => handleQuantityChange(1)}
-                                    className="bg-gray-200 px-2 py-2 rounded-r"
-                                >
-                                    <BsPlusLg />
-                                </button>
-                            </div>
-                            <div className="text-xl font-bold">
-                                Total: {total}฿
-                            </div>
-                        </div>
-
-                        <div className="flex space-x-4">
-                            <button
-                                className="flex-1 bg-[#E9E4D6] hover:bg-gray-200 text-gray-800 p-3 rounded-lg flex justify-center items-center space-x-2"
-                                onClick={handleAddToCart}
-                            >
-                                <BsFillCartFill />
-                                <span>Add to Cart</span>
-                            </button>
-                            <button
-                                onClick={handleProceedToCheckout}
-                                className="flex-1 bg-black hover:bg-gray-800 text-white p-3 rounded-lg flex justify-center items-center">
-                                <span>Buy Now</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="mt-12">
-                <h2 className="text-2xl tablet:text-3xl font-bold mb-4">Customer Reviews</h2>
-                {isLoggedIn ? (
-                    <form onSubmit={handleCommentSubmit} className="mb-6">
-                        <div className="flex mb-2">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <button
-                                    key={star}
-                                    type="button"
-                                    onClick={() => setUserRating(star)}
-                                    className="mr-1"
-                                >
-                                    {star <= userRating ? (
-                                        <BsStarFill className="w-6 h-6 text-yellow-400" />
+                                    {Array.isArray(product.images) && product.images.length > 0 ? (
+                                        product.images.map((img, index) => (
+                                            <SwiperSlide key={index} className="relative w-full h-full">
+                                                <div className="absolute inset-0 w-full h-full group">
+                                                    <img
+                                                        src={img.url}
+                                                        alt={`Product ${index + 1}`}
+                                                        className="inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                                                    />
+                                                    <div className="inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
+                                                </div>
+                                            </SwiperSlide>
+                                        ))
                                     ) : (
-                                        <BsStar className="w-6 h-6 text-gray-300" />
+                                        <SwiperSlide className="relative w-full h-full">
+                                            <div className="absolute inset-0 flex items-center justify-center bg-pink-50">
+                                                <span className="text-primary-color text-lg">No Image Available</span>
+                                            </div>
+                                        </SwiperSlide>
                                     )}
-                                </button>
-                            ))}
+                                </Swiper>
+                            </div>
                         </div>
-                        <textarea
-                            value={comment}
-                            onChange={(e) => setComment(e.target.value)}
-                            placeholder="Write your review here..."
-                            className="w-full p-2 border rounded-md mb-2"
-                            rows="3"
-                        />
-                        <button
-                            type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                        >
-                            Submit Review
-                        </button>
-                    </form>
-                ) : (
-                    <p className="text-red-500">Please log in to write a review.</p>
-                )}
 
-                <div className="space-y-4">
-                    {reviews.map((review, index) => (
-                        <div key={index} className="bg-gray-100 p-4 rounded-md shadow-md">
-                            <div className="flex items-center mb-2">
-                                <img
-                                    src={review.user.profileImage?.[0]?.url || '../images/avata-profile.png'}
-                                    alt={`${review.user.username}'s profile`}
-                                    className="w-10 h-10 rounded-full mr-3 object-cover"
-                                />
-                                <div>
-                                    <p className="font-semibold">{review.user.username}</p>
-                                    <div className="flex">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <BsStarFill
-                                                key={star}
-                                                className={`w-4 h-4 ${star <= review.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                                            />
-                                        ))}
+                        <div className="col-span-1 tablet:col-span-1 p-4 tablet:px-16 tablet:py-8 bg-white rounded-lg h-full">
+                            <h2 className="text-2xl tablet:text-4xl font-bold mb-4">{product.name}</h2>
+                            <p>{renderDescription(product.description)}</p>
+
+                            <div className="space-y-4 mt-4">
+                                {/* Quantity Selector */}
+                                <div className="flex items-center space-x-4">
+                                    <span className="text-lg tablet:text-xl font-light">Quantity:</span>
+                                    <div className="flex items-center border border-gray-300 rounded-xl overflow-hidden">
+                                        <button onClick={() => handleQuantityChange(-1)} className="p-2 hover:bg-primary-color/15 rounded-l-xl">
+                                            <BsDashLg size={20} />
+                                        </button>
+                                        <span className="px-4 text-xl">{quantity}</span>
+                                        <button onClick={() => handleQuantityChange(1)} className="p-2 hover:bg-primary-color/15 rounded-r-xl">
+                                            <BsPlusLg size={20} />
+                                        </button>
                                     </div>
                                 </div>
+
+                                {/* Price Display */}
+                                <div className="flex items-center space-x-4">
+                                    <span className="text-gray-700 text-lg tablet:text-xl font-light">Price :</span>
+                                    <span className="text-gray-800 text-base font-medium rounded-full bg-primary-color/15 px-3 py-1 inline-flex items-center gap-1">
+                                        <span className="text-primary-color text-lg tablet:text-xl font-light">฿</span>
+                                        <span className="text-gray-700 text-lg tablet:text-xl font-light">{product.price}</span>
+                                    </span>
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex flex-col tablet:flex-row space-y-4 tablet:space-y-0 tablet:space-x-4 pt-6">
+                                    <button
+                                        onClick={handleProceedToCheckout}
+                                        className="w-full  bg-primary-color hover:bg-secondary-color/80 text-white py-3 px-8 tablet:px-28 rounded-lg transition duration-200"
+                                    >
+                                        Buy Now
+                                    </button>
+                                    <button
+                                        onClick={handleAddToCart}
+                                        className="w-full tablet:w-auto bg-primary-color/15 py-3 tablet:py-1 px-4 rounded-lg transition duration-200 flex items-center justify-center"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#5c6bc0" fill="none">
+                                            <path d="M11.5 22H9.62182C7.27396 22 6.10003 22 5.28565 21.2945C4.47127 20.5889 4.27181 19.3991 3.87289 17.0194L2.66933 9.83981C2.48735 8.75428 2.39637 8.21152 2.68773 7.85576C2.9791 7.5 3.51461 7.5 4.58564 7.5H19.4144C20.4854 7.5 21.0209 7.5 21.3123 7.85576C21.6036 8.21152 21.5126 8.75428 21.3307 9.83981L21.0524 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                            <path d="M13.6418 14.4418C14.8486 13.7108 15.9018 14.0054 16.5345 14.4747C16.794 14.6671 16.9237 14.7633 17 14.7633C17.0763 14.7633 17.206 14.6671 17.4655 14.4747C18.0982 14.0054 19.1514 13.7108 20.3582 14.4418C21.9419 15.4013 22.3002 18.5666 18.6472 21.237C17.9514 21.7457 17.6035 22 17 22C16.3965 22 16.0486 21.7457 15.3528 21.237C11.6998 18.5666 12.0581 15.4013 13.6418 14.4418Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                                            <path d="M17.5 7.5C17.5 4.46243 15.0376 2 12 2C8.96243 2 6.5 4.46243 6.5 7.5" stroke="currentColor" stroke-width="1.5" />
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
-                            <p>{review.comment}</p>
                         </div>
-                    ))}
+                    </div>
                 </div>
+
+                {/* Reviews Section */}
+                <ReviweProductDetail
+                    comment={comment}
+                    userRating={userRating}
+                    reviews={reviews}
+                    setUserRating={setUserRating}
+                    setComment={setComment}
+                    handleCommentSubmit={handleCommentSubmit}
+                    isLoggedIn={isLoggedIn}
+                />
             </div>
+
+            <YouMayAlsoLike />
         </div>
     );
 };
 
 export default ProductDetail;
-
-

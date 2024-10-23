@@ -16,27 +16,29 @@ const IconCarts = () => {
     return (
         <div className="relative group">
             <Link to='/cartpage' className="block">
-                <div className="p-2 bg-gradient-to-r bg-[#FF6F92] rounded-full shadow-md transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-6">
-                    <ShoppingCartIcon className="w-6 h-6 cursor-pointer text-white transition-colors duration-300 group-hover:text-pink-100" />
+                <div className="p-2 bg-primary-color rounded-full shadow-md transition-all duration-300 transform group-hover:scale-110 group-hover:rotate-6 hover:shadow-lg hover:bg-secondary-color">
+                    <ShoppingCartIcon className="w-6 h-6 cursor-pointer text-white transition-colors duration-300 group-hover:text-blue-100" />
                 </div>
                 {itemCount > 0 && (
-                    <div className="absolute -top-2 -right-2 bg-[#ff5e5e] tranparent text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg transition-all duration-300 transform group-hover:scale-125 group-hover:-rotate-12">
-                        <span className="">{itemCount}</span>
+                    <div className="absolute -top-2 -right-2 bg-[#ff5e5e] text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center shadow-lg transition-all duration-300 transform group-hover:scale-125 group-hover:-rotate-12">
+                        <span>{itemCount}</span>
                     </div>
                 )}
             </Link>
             {itemCount > 0 && (
-                <div className="absolute -bottom-16 w-48 right-0 bg-[#FF6F92] text-white text-sm font-bold py-3 px-4 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform rotate-3">
+                <div className="absolute -bottom-16 w-48 right-0 bg-primary-color text-white text-sm font-bold py-3 px-4 rounded-md shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform rotate-3">
                     <span className="border-b-2 border-white">{itemCount} {itemCount === 1 ? 'item' : 'items'}</span>
                     <span className="block">in cart</span>
                 </div>
             )}
-
         </div>
     );
 };
 
 export default IconCarts;
+
+
+
 
 
 

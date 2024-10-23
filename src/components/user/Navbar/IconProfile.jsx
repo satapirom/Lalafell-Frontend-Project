@@ -1,27 +1,44 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DropdownMenu from './DropdownMenu';
 import useDropdown from '../../../hooks/user/useDropdown';
+import { useAuth } from '../../../contexts/AuthContext';
+import axiosInstance from '../../../utils/axiosInstance';
 
-const ElegantFlowerFrame = ({ children }) => (
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style={{ stopColor: '#FFD1DC', stopOpacity: 1 }} />
-                <stop offset="100%" style={{ stopColor: '#FF69B4', stopOpacity: 1 }} />
-            </linearGradient>
-        </defs>
-        <circle cx="24" cy="24" r="23" fill="white" stroke="url(#grad1)" strokeWidth="2" />
-        <path d="M24 5C28 5 31 8 31 12C31 16 28 19 24 19C20 19 17 16 17 12C17 8 20 5 24 5Z" fill="url(#grad1)" />
-        <path d="M43 24C43 28 40 31 36 31C32 31 29 28 29 24C29 20 32 17 36 17C40 17 43 20 43 24Z" fill="url(#grad1)" />
-        <path d="M24 43C20 43 17 40 17 36C17 32 20 29 24 29C28 29 31 32 31 36C31 40 28 43 24 43Z" fill="url(#grad1)" />
-        <path d="M5 24C5 20 8 17 12 17C16 17 19 20 19 24C19 28 16 31 12 31C8 31 5 28 5 24Z" fill="url(#grad1)" />
-        {children}
+const icon = (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ffffff"} fill={"none"}>
+        <path d="M6.57757 15.4816C5.1628 16.324 1.45336 18.0441 3.71266 20.1966C4.81631 21.248 6.04549 22 7.59087 22H16.4091C17.9545 22 19.1837 21.248 20.2873 20.1966C22.5466 18.0441 18.8372 16.324 17.4224 15.4816C14.1048 13.5061 9.89519 13.5061 6.57757 15.4816Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5Z" stroke="currentColor" strokeWidth="1.5" />
     </svg>
 );
 
 const IconProfile = () => {
     const { isOpen, toggleDropdown, closeDropdown } = useDropdown();
     const profileRef = useRef(null);
+    const { isLoggedIn, logout } = useAuth();
+    const [profile, setProfile] = useState(null);
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            if (isLoggedIn) {
+                try {
+                    const response = await axiosInstance.get('/users/profile');
+                    setProfile(response.data.myUser);
+                } catch (error) {
+                    console.error('Error fetching profile:', error);
+                    setProfile(null);
+                }
+            } else {
+                setProfile(null);
+            }
+        };
+
+        fetchProfile();
+    }, [isLoggedIn]);
+
+    const handleLogout = () => {
+        logout();
+        closeDropdown();
+    };
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -41,27 +58,50 @@ const IconProfile = () => {
         };
     }, [isOpen, closeDropdown]);
 
+    const renderProfileImage = () => {
+        if (!isLoggedIn || !profile) {
+            return (
+                <div className='w-10 h-10 bg-primary-color rounded-full flex items-center justify-center'>
+                    {icon}
+                </div>
+            );
+        }
+
+        const imageUrl = profile.profileImage && profile.profileImage[0]?.url;
+        if (!imageUrl) {
+            return (
+                <div className='w-10 h-10 bg-primary-color rounded-full flex items-center justify-center text-white font-bold'>
+                    {profile.username ? profile.username[0].toUpperCase() : '?'}
+                </div>
+            );
+        }
+
+        return (
+            <img
+                src={imageUrl}
+                alt={profile.username || 'User'}
+                className="w-10 h-10 rounded-full object-cover"
+                onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = '../images/avatar-profile.png';
+                }}
+            />
+        );
+    };
+
     return (
         <div className="relative flex items-center" ref={profileRef}>
             <div
-                className="cursor-pointer transition-all duration-300 hover:scale-110 hover:rotate-[15deg]"
+                className="cursor-pointer transition-all duration-300 hover:scale-110"
                 onClick={toggleDropdown}
             >
-                <ElegantFlowerFrame>
-                    <circle cx="24" cy="24" r="15" fill="white" />
-                    <image
-                        href="/images/icon-profile.svg"
-                        x="14"
-                        y="14"
-                        width="20"
-                        height="20"
-                        className="transition-all duration-300 hover:saturate-150"
-                    />
-                </ElegantFlowerFrame>
+                {renderProfileImage()}
             </div>
             <DropdownMenu
                 isOpen={isOpen}
                 onClose={closeDropdown}
+                profile={profile}
+                onLogout={handleLogout}
             />
         </div>
     );

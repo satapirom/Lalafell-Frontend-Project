@@ -58,15 +58,19 @@ const Login = () => {
 
 
     return (
-        <div className="bg-gray-100 flex items-center justify-center">
-            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8 w-full max-w-screen-laptopl mt-16 bg-white shadow-lg rounded-lg overflow-hidden laptop:grid-cols-2">
+        <div className="flex items-center justify-center">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8 w-full max-w-screen-laptopl mt-20  overflow-hidden laptop:grid-cols-2">
                 <WelcomeBanner />
                 <div className="p-8 lg:p-12">
                     <h2 className="text-2xl laptop:text-3xl font-bold text-gray-800 mb-4">Sign In to Your Account</h2>
                     <p className="text-gray-600 mb-6">Welcome back! Please log in to continue.</p>
 
-                    <button className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 mb-6">
-                        <img src="../images/icon-google1.svg" alt="Google" className="w-5 h-5 mr-2" />
+                    <button className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white  mb-6">
+                        <img
+                            src="../images/icon-google1.svg"
+                            alt="Google"
+                            className="w-5 h-5 mr-2"
+                        />
                         Sign in with Google
                     </button>
 

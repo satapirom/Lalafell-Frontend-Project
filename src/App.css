@@ -5,6 +5,10 @@ body {
   background-color: rgba(255, 255, 255);
 }
 
+.custom-bg {
+  background-image: linear-gradient(to right, #F3F4F6, #E5E7EB);
+}
+
 .underline-custom {
   text-decoration-color: #04001e; /* สีของ underline */
   text-decoration-thickness: 2px; /* ความหนาของ underline */
@@ -19,12 +23,83 @@ body {
   border: 1px solid rgba(209, 213, 219, 0.3);
 }
 
-.custom-font-logo {
-  font-family: "Nerko One", cursive;
-  font-weight: 400;
-  font-style: normal;
+@keyframes float {
+    0% {
+      transform: translateY(0px) rotate(-12deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(-12deg);
+    }
+    100% {
+      transform: translateY(0px) rotate(-12deg);
+    }
+  }
+  
+  @keyframes wave {
+    0% {
+      d: path('M0 2.5C50 2.5 50 4.5 100 4.5C150 4.5 150 2.5 200 2.5');
+    }
+    50% {
+      d: path('M0 2.5C50 2.5 50 0.5 100 0.5C150 0.5 150 2.5 200 2.5');
+    }
+    100% {
+      d: path('M0 2.5C50 2.5 50 4.5 100 4.5C150 4.5 150 2.5 200 2.5');
+    }
+  }
+  
+  .animate-wave {
+    animation: wave 2s ease-in-out infinite;
+  }
+
+  /* for you may also like */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
 }
 
+.scrollbar-hide {
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    scrollbar-width: none; /* Firefox */
+}
 
+@keyframes shimmer {
+    0% {
+        opacity: 0.5;
+        transform: translate(-50%, 0) scale(0.95);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, 0) scale(1.05);
+    }
+    100% {
+        opacity: 0.5;
+        transform: translate(-50%, 0) scale(0.95);
+    }
+}
 
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) scale(1);
+    }
+    50% {
+        transform: translateY(-20px) scale(1.1);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delay {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: 3s;
+}
+
+.animate-shimmer {
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+/* for product display */
+.products-container {
+  transition: opacity 0.3s ease-in-out;
+}
 

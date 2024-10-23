@@ -2,20 +2,39 @@ import React from 'react';
 
 const SwichesCard = () => {
     return (
-        <div className="bg-white rounded-xl shadow-lg relative mx-auto my-4 flex flex-col w-full h-40 laptop:h-52 overflow-hidden">
-            <div className="relative">
-                <img
-                    src="../images/Switch.jpg"
-                    alt="Switch"
-                    className="w-full h-40 laptop:h-52 object-cover"
-                />
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-700 hover:bg-[#E9E4D6]/40 bg-[#E9E4D6]/70 px-2 bg-gradient-to-t from-purple-800/30 via-transparent to-transparent">
-                    <h3 className="font-bold text-xl labtop:text-2xl mb-2 text-center">Switches</h3>
-                    <p className="text-sm labtop:text-lg italic mb-4 text-center">"Feel the difference in every press."</p>
-                    <div className="flex items-center">
-                        <span className="text-yellow-500 text-sm tablet:text-base mr-1">★</span>
-                        <span className="text-xs labtop:text-base">Rating</span>
+        <div className="group">
+            <div className="bg-white rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 relative mx-auto my-4 h-40 laptop:h-52 w-full overflow-hidden border border-gray-100">
+                {/* Gradient Background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-white to-cyan-100 opacity-50" />
+
+                {/* Decorative Elements */}
+                <div className="absolute top-4 right-4">
+                    <span className="text-2xl">🔘</span>
+                </div>
+
+                {/* Content Container */}
+                <div className="relative h-full flex flex-col items-center justify-center p-6 group-hover:transform group-hover:scale-105 transition-transform duration-300">
+                    {/* Title */}
+                    <h3 className="font-bold text-xl laptop:text-2xl mb-3 text-gray-800">
+                        Switches
+                    </h3>
+
+                    {/* Divider */}
+                    <div className="w-12 h-0.5 bg-gradient-to-r from-blue-400 to-cyan-400 mb-3" />
+
+                    {/* Subtitle */}
+                    <p className="text-sm laptop:text-base text-gray-600 mb-4 text-center">
+                        "Feel the difference in every press"
+                    </p>
+
+                    {/* Rating */}
+                    <div className="flex items-center space-x-2 text-gray-500 bg-gray-50 px-3 py-1 rounded-full">
+                        <span className="text-yellow-400">★</span>
+                        <span className="text-sm">Rating</span>
                     </div>
+
+                    {/* Hover Effect Decoration */}
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-400 to-cyan-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
                 </div>
             </div>
         </div>

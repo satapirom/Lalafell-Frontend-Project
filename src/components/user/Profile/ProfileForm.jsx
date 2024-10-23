@@ -5,8 +5,6 @@ import { IoSettingsSharp } from "react-icons/io5";
 import useUpload from '../../../hooks/user/useUpload.js';
 import { getProfile } from '../../../services/uploadProfileServices.js';
 
-
-
 const ProfileForm = () => {
     const { formData, handleImageChange, handleUpload } = useUpload();
     const [coverImage, setCoverImage] = useState(null);

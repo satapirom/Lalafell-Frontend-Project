@@ -22,35 +22,41 @@ const CategoryFilter = ({ isSizeOpen, toggleSize, handleCategorySelect, selected
 
     return (
         <div ref={filterRef} className="relative">
-            <div className='flex items-center cursor-pointer' onClick={toggleSize}>
-                <label className="flex items-center mr-2 hover:text-gray-800 hover:underline underline-custom cursor-pointer">
-                    Category: {selectedCategory || 'All'}
-                    <IoIosArrowDropdown size={20} className='ml-2' />
+            <div
+                className="flex items-center cursor-pointer bg-white/50 hover:bg-primary-color/15 text-gray-700  py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-sm"
+                onClick={toggleSize}
+            >
+                <label className="flex items-center cursor-pointer">
+                    <span className="mr-2 ">
+                        Category: {selectedCategory || 'All'}
+                    </span>
+                    <IoIosArrowDropdown size={20} className="ml-1" />
                 </label>
             </div>
+
             {isSizeOpen && (
                 <div className='absolute top-full left-0 mt-2 z-30'>
-                    <div className="mb-4 bg-white p-4 rounded-lg w-80 shadow-md">
+                    <div className="mb-4 custom-galssmorpuism p-4 rounded-lg w-80 shadow-md">
                         <h4
-                            className='block mr-2 cursor-pointer hover:bg-[#E9E4D6]/80 rounded-md py-2 px-4 text-gray-800'
+                            className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('')}
                         >
                             All Products
                         </h4>
                         <h4
-                            className='block mr-2 cursor-pointer hover:bg-[#E9E4D6]/80 rounded-md py-2 px-4 text-gray-800'
+                            className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('keyboard')}
                         >
                             Keyboards
                         </h4>
                         <h4
-                            className='block mr-2 cursor-pointer hover:bg-[#E9E4D6]/80 rounded-md py-2 px-4 text-gray-800'
+                            className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('keycap')}
                         >
                             Key Caps
                         </h4>
                         <h4
-                            className='block mr-2 cursor-pointer hover:bg-[#E9E4D6]/80 rounded-md py-2 px-4 text-gray-800'
+                            className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('switch')}
                         >
                             Switch

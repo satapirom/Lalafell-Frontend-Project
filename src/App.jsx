@@ -67,10 +67,6 @@ function MainApp() {
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path='/orderlist' element={<OrderDashboard />} />
 
-
-
-
-
         {/* Admin */}
         <Route path="/products/new" element={<AddProducts />} />
       </Routes>
