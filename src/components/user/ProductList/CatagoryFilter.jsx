@@ -27,7 +27,7 @@ const CategoryFilter = ({ isSizeOpen, toggleSize, handleCategorySelect, selected
                 onClick={toggleSize}
             >
                 <label className="flex items-center cursor-pointer">
-                    <span className="mr-2 ">
+                    <span className="mr-2 hover:text-primary-color ">
                         Category: {selectedCategory || 'All'}
                     </span>
                     <IoIosArrowDropdown size={20} className="ml-1" />
@@ -36,32 +36,32 @@ const CategoryFilter = ({ isSizeOpen, toggleSize, handleCategorySelect, selected
 
             {isSizeOpen && (
                 <div className='absolute top-full left-0 mt-2 z-30'>
-                    <div className="mb-4 custom-galssmorpuism p-4 rounded-lg w-80 shadow-md">
-                        <h4
+                    <ul className="mb-4 custom-galssmorpuism p-4 rounded-lg w-80 shadow-md">
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('')}
                         >
                             All Products
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('keyboard')}
                         >
                             Keyboards
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('keycap')}
                         >
                             Key Caps
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('switch')}
                         >
                             Switch
-                        </h4>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
             )}
         </div>

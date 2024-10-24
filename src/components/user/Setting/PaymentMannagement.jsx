@@ -97,16 +97,15 @@ const PaymentManagement = ({ user }) => {
     };
 
     return (
-        <div className="container mx-auto p-4 max-w-4xl">
-            <div className="w-full">
-                <div>
-                    <h1 className="text-2xl font-bold">Add Payment Account</h1>
+        <div className="container mx-auto custom-bg rounded-lg max-w-screen-laptopl">
+            <div className="w-full p-8">
+                <div className='space-y-2'>
+                    <h1 className="text-lg font-semibold text-gray-80">Add Payment Account</h1>
                     <p>Please add your preferred payment method.</p>
                 </div>
-                {error && <div className="text-red-500">{error}</div>}
-                <div className="space-y-4 mt-6">
+                <div className="space-y-4">
                     {/* Bank Account Button */}
-                    <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                    <div className="flex items-center space-x-2 border rounded-lg p-4 custom-galssmorpuism hover:bg-gray-50 cursor-pointer">
                         <button
                             onClick={() => setShowBankSection(!showBankSection)}
                             className="flex items-center space-x-2"
@@ -128,7 +127,7 @@ const PaymentManagement = ({ user }) => {
                     )}
 
                     {/* Credit/Debit Card Button */}
-                    <div className="flex items-center space-x-2 border rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
+                    <div className="flex items-center space-x-2 border rounded-lg p-4 custom-galssmorpuism hover:bg-gray-50 cursor-pointer">
                         <button
                             onClick={() => setShowCardSection(!showCardSection)}
                             className="flex items-center space-x-2"

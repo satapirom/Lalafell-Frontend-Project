@@ -1,51 +1,66 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { toggleWishlistItem, getWishlistItems } from '../services/wishlistServices';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getWishlistItems } from '../services/wishlistServices';
+import { useAuth } from './AuthContext';
 
 const WishlistContext = createContext();
 
 export const WishlistProvider = ({ children }) => {
-    const [wishlist, setWishlist] = useState(new Set());
-    const [isLoading, setIsLoading] = useState(true);
+    const [wishlistItems, setWishlistItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const { isAuthenticated } = useAuth();
 
-    useEffect(() => {
-        const fetchWishlist = async () => {
-            setIsLoading(true); // เริ่มต้นการโหลด
-            try {
-                const items = await getWishlistItems();
-                // ตรวจสอบว่าข้อมูลมีรูปแบบตามที่คาดหวัง
-                setWishlist(new Set(items.map(item => item.product._id))); // เปลี่ยนเป็น item.product._id
-            } catch (error) {
-                console.error('Failed to fetch wishlist:', error);
-            } finally {
-                setIsLoading(false); // สิ้นสุดการโหลด
-            }
-        };
+    const fetchWishlist = async () => {
+        if (!isAuthenticated) {
+            setWishlistItems([]);
+            return;
+        }
 
-        fetchWishlist();
-    }, []);
-
-    const toggleItem = async (productId) => {
+        setIsLoading(true);
+        setError(null);
         try {
-            await toggleWishlistItem(productId); // เรียก API เพื่อเพิ่ม/ลบสินค้า
-            setWishlist(prevWishlist => {
-                const newWishlist = new Set(prevWishlist);
-                if (newWishlist.has(productId)) {
-                    newWishlist.delete(productId); // ลบสินค้า
-                } else {
-                    newWishlist.add(productId); // เพิ่มสินค้า
-                }
-                return newWishlist; // คืนค่า new Set ที่อัปเดต
-            });
+            const items = await getWishlistItems();
+            setWishlistItems(items || []);
         } catch (error) {
-            console.error('Failed to toggle wishlist item:', error);
+            if (isAuthenticated) {
+                setError(error.message);
+            }
+        } finally {
+            setIsLoading(false);
         }
     };
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchWishlist();
+        } else {
+            setWishlistItems([]);
+            setError(null);
+        }
+    }, [isAuthenticated]);
+
+    const isInWishlist = (productId) => {
+        return wishlistItems.some(item => item._id === productId);
+    };
+
     return (
-        <WishlistContext.Provider value={{ wishlist, toggleItem, isLoading }}>
+        <WishlistContext.Provider value={{
+            wishlistItems,
+            isLoading,
+            error,
+            fetchWishlist,
+            isInWishlist
+        }}>
             {children}
         </WishlistContext.Provider>
     );
 };
 
-export const useWishlist = () => useContext(WishlistContext);
+
+export const useWishlist = () => {
+    const context = useContext(WishlistContext);
+    if (context === undefined) {
+        throw new Error('useWishlist must be used within a WishlistProvider');
+    }
+    return context;
+};

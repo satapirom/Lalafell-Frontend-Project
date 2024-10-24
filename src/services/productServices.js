@@ -53,10 +53,10 @@ export const searchProducts = async (query) => {
             throw new Error('Search query is required');
         }
 
-        const response = await handleApiCall('get', `${API_ENDPOINTS.SEARCH}?q=${query}`);
-        return response.products;
+        const response = await handleApiCall('get', `${API_ENDPOINTS.SEARCH}?q=${encodeURIComponent(query)}`);
+        return response.products; // Ensure this returns only the products array
     } catch (error) {
-        console.error('Error searching products:', error);
+        console.error('Error fetching products:', error);
         throw error;
     }
 };

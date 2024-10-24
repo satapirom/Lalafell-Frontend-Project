@@ -19,7 +19,7 @@ const WhatNewProduct = () => {
                     throw new Error('Products is not an array');
                 }
 
-                // เรียงตาม timestamp ที่มีอยู่แล้วของสินค้า
+                // Sort products by timestamp
                 const sortedProducts = products.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 const limitedProducts = sortedProducts.slice(0, 4);
 
@@ -43,12 +43,12 @@ const WhatNewProduct = () => {
     }, []);
 
     if (loading) return <p>Loading the hottest products...</p>;
-    if (error) return <p>Oops! There seems to be an error {error}</p>;
+    if (error) return <p>Oops! There seems to be an error: {error}</p>;
 
     return (
         <div className="container mx-auto p-8 mt-8 max-w-screen-laptopl custom-bg rounded-lg">
             <div className="relative mb-10">
-                <h1 className="text-5xl font-extrabold text-center text-transparent bg-clip-text transform -rotate-2"
+                <h1 className="text-4xl tablet:text-5xl font-extrabold text-center text-transparent bg-clip-text transform -rotate-2"
                     style={{
                         textShadow: '2px 2px 4px rgba(0,0,0,0.1)',
                         WebkitTextStroke: '1px #000000',
@@ -64,22 +64,13 @@ const WhatNewProduct = () => {
                 </div>
             </div>
 
-            <div className="flex justify-center overflow-hidden">
-                <div
-                    data-aos="slide-up"
-                    data-aos-offset="50"
-                    data-aos-delay="100"
-                    data-aos-duration="900"
-                    data-aos-easing="ease-in-out"
-                    data-aos-mirror="false"
-                    data-aos-once="false"
-                >
-                    <div className="hidden mobile:flex overflow-x-auto whitespace-nowrap gap-4">
-                        {limitedProducts.map((product) => (
-                            <ProductCard key={product._id} product={product} />
-                        ))}
+            {/* Horizontal scrolling container */}
+            <div className="flex justify-between overflow-x-auto scroll-smooth gap-4 transition duration-500 ">
+                {limitedProducts.map((product) => (
+                    <div key={product._id} className="flex-shrink-0 w-64  tablet:w-auto">
+                        <ProductCard product={product} />
                     </div>
-                </div>
+                ))}
             </div>
         </div>
     );

@@ -29,7 +29,7 @@ export const toggleWishlistItem = async (productId) => {
         throw new Error('Invalid product ID');
     }
     try {
-        const response = await handleApiCall('post', `${API_ENDPOINTS.USER_WISHLIST}/toggle`, { productId });
+        const response = await handleApiCall('post', `${API_ENDPOINTS.USER_WISHLIST}/wishlist/toggle`, { productId });
         return response;
     } catch (error) {
         console.error('Error toggling wishlist item:', error);

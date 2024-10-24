@@ -153,7 +153,7 @@ const ProductDetail = () => {
             <div>
                 <div className=" custom-bg p-4 tablet:p-8 rounded-lg">
                     <div className="grid grid-cols-1 tablet:grid-cols-2 items-stretch justify-between bg-white rounded-lg">
-                        <div className='col-span-1 rounded-l-xl overflow-hidden'>
+                        <div className='col-span-1  laptop:rounded-l-xl  overflow-hidden'>
                             <div className="relative w-full" style={{ paddingBottom: '75%' }}>
                                 <Swiper
                                     slidesPerView={1}

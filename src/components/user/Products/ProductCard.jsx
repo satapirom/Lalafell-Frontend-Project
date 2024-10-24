@@ -5,18 +5,20 @@ import 'swiper/css';
 import FavoriteButton from './FavoriteButton';
 import { getReviews } from '../../../services/reviweServices';
 import { useWishlist } from '../../../contexts/WishlistContext';
+import { useAuth } from '../../../contexts/AuthContext';
 
 const ProductCard = ({ product }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [reviews, setReviews] = useState([]);
     const navigate = useNavigate();
-    const { wishlist } = useWishlist();
+    const { isInWishlist } = useWishlist();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const fetchReviews = async () => {
             try {
                 const response = await getReviews(product._id);
-                setReviews(response);
+                setReviews(response || []);
             } catch (error) {
                 console.error('Error fetching reviews:', error);
                 setReviews([]);
@@ -26,8 +28,9 @@ const ProductCard = ({ product }) => {
     }, [product._id]);
 
     const averageRating = useMemo(() => {
+        if (!reviews.length) return 0;
         const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0);
-        return reviews.length ? totalRating / reviews.length : 0;
+        return totalRating / reviews.length;
     }, [reviews]);
 
     const toggleDescription = () => {
@@ -41,9 +44,8 @@ const ProductCard = ({ product }) => {
     const renderDescription = (description) => {
         if (!description) return null;
 
-        // ตรวจสอบขนาดหน้าจอ
-        const isMobile = window.innerWidth < 600; // สมมติว่า tablet ขึ้นไปคือ 768px
-        const maxLength = isMobile ? 10 : 60; // 10 ตัวอักษรสำหรับ mobile, 30 สำหรับ tablet
+        const isMobile = window.innerWidth < 600;
+        const maxLength = isMobile ? 10 : 60;
 
         const truncatedDescription = description.length > maxLength
             ? `${description.slice(0, maxLength)}...`
@@ -61,7 +63,6 @@ const ProductCard = ({ product }) => {
         );
     };
 
-
     return (
         <div className="bg-white shadow-sm p-4 rounded-xl relative max-w-xs mx-auto my-4 flex flex-col card-responsive">
             <Swiper
@@ -74,7 +75,7 @@ const ProductCard = ({ product }) => {
                     product.images.map((img, index) => (
                         <SwiperSlide key={index}>
                             <img
-                                src={img.url || 'fallback-image-url.jpg'}
+                                src={img.url || '/placeholder-image.jpg'}
                                 alt={`Product Image ${index + 1}`}
                                 className="w-full h-full object-cover rounded-lg"
                             />
@@ -88,6 +89,7 @@ const ProductCard = ({ product }) => {
                     </SwiperSlide>
                 )}
             </Swiper>
+
             <div className="tablet:flex items-center justify-between mb-2">
                 <h2 className="text-sm tablet:text-lg font-medium truncate flex-1 mr-2">{product.name}</h2>
                 <span className="text-gray-800 text-base font-medium rounded-full tablet:px-3 py-1 tablet:bg-primary-color/15 inline-flex items-center gap-1 whitespace-nowrap">
@@ -133,7 +135,7 @@ const ProductCard = ({ product }) => {
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 24 24"
                         className={`h-4 w-4 tablet:w-5 tablet:h-5 ${i < Math.round(averageRating) ? 'text-yellow-400' : 'text-gray-300'}`}
-                        fill="none"
+                        fill="currentColor"
                         stroke="currentColor"
                         strokeWidth="1.5"
                         strokeLinecap="round"
@@ -145,16 +147,16 @@ const ProductCard = ({ product }) => {
                 <span className="ml-2 text-gray-800">{averageRating.toFixed(1)}</span>
             </div>
 
-            <div className='flex justify-between gap-2 items-center'>
+            <div className='flex justify-between gap-2 items-center mt-4'>
                 <button
                     onClick={handleBuyNow}
-                    className="w-full text-xs tablet:text-base hover:bg-primary-color hover:text-white text-white bg-primary-color/80  p-3 py-2 rounded-lg flex justify-center items-center space-x-2 mt-auto"
+                    className="w-full text-xs tablet:text-base hover:bg-primary-color hover:text-white text-white bg-primary-color/80 p-3 py-2 rounded-lg flex justify-center items-center space-x-2"
                 >
                     <span>Buy Now</span>
                 </button>
                 <FavoriteButton
                     productId={product._id}
-                    isFavorited={wishlist.has(product._id)}
+                    isFavorited={isInWishlist(product._id)}
                 />
             </div>
         </div>
@@ -162,4 +164,3 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
-

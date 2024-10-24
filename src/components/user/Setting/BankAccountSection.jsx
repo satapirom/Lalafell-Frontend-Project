@@ -101,43 +101,46 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
     }
 
     return (
-        <div>
+        <div className='p-8'>
             {error && <div className="text-red-500">{error}</div>}
             <div className='flex justify-between'>
                 <div>
-                    <h2 className="text-lg font-semibold mt-6">Bank Accounts</h2>
+                    <h2 className=" mt-6">Bank Accounts</h2>
                     {accounts.length === 0 ? (
                         <p>No bank accounts found. Add a new payment to get started.</p>
                     ) : (
-                        <p>{accounts.length} bank account(s) found.</p>
+                        <p className='bg-primary-color/15 rounded-full px-4 py-1'>{accounts.length} bank account(s) found.</p>
                     )}
                 </div>
                 <div>
                     <button
                         onClick={handleAddBankAccount}
-                        className="mt-2 bg-blue-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-blue-600"
+                        className="bg-primary-color text-white px-6 py-2 rounded-md hover:bg-primary-color/80 transition duration-200 flex items-center"
                     >
-                        + Add Bank Account
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                            <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Add Bank Account
                     </button>
                 </div>
             </div>
             {accounts.length > 0 && (
-                <ul className="divide-y divide-gray-200 mt-4">
+                <ul className="divide-y divide-gray-200 p-4">
                     {accounts.map((account, index) => (
-                        <li key={account._id || index} className="py-4 flex items-center justify-between">
+                        <li key={account._id || index} className="p-4 flex items-center justify-between hover:bg-gray-100 rounded-lg">
                             <div className="flex items-center space-x-4">
-                                <Smartphone className="h-8 w-8 text-green-500" />
-                                <div className="min-w-0">
-                                    <p className="text-sm font-medium text-gray-900 truncate">
-                                        {account.bankName}
-                                    </p>
-                                    <p className="text-sm text-gray-500 truncate">
-                                        {account.accountHolderName}
-                                    </p>
-                                    <p className="text-sm text-gray-500 truncate">
-                                        {account.accountNumber}
-                                    </p>
-                                </div>
+                                <ul className="space-y-1 text-sm leading-relaxed">
+                                    <li className="font-medium">
+                                        Bank Account Name: <span className="font-normal">{account.bankName}</span>
+                                    </li>
+                                    <li className="font-medium">
+                                        Account Name: <span className="font-normal">{account.accountHolderName}</span>
+                                    </li>
+                                    <li className="font-medium">
+                                        Account Number: <span className="font-normal">{account.accountNumber}</span>
+                                    </li>
+                                </ul>
+
                             </div>
                             <div className="flex space-x-2">
                                 <button

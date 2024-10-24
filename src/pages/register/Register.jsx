@@ -6,6 +6,8 @@ import FormValidate from "../../validations/FormValidate.js";
 import WelcomeBanner from "../../components/register/WelcomeBanner";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
+import toast, { Toaster } from 'react-hot-toast';
+
 //test
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -36,12 +38,12 @@ const Register = () => {
         e.preventDefault();
 
         if (formData.password !== formData.confirmPassword) {
-            console.log("Passwords do not match");
+            toast.error("Passwords do not match");
             return;
         }
 
         try {
-            const response = await axiosInstance.post('/api/v1/register', {
+            const response = await axiosInstance.post('/register', {
                 username: formData.username,
                 email: formData.email,
                 password: formData.password,
@@ -51,15 +53,15 @@ const Register = () => {
             });
 
             if (response.status === 201) {
-                console.log("Registration successful");
+                toast.success("Registration successful");
                 navigate('/login');
             } else {
-                console.log("Registration failed");
+                toast.error("Registration failed");
             }
 
         } catch (error) {
             if (error.response && error.response.status === 409) {
-                console.log("Username or email already exists");
+                toast.error("Username or email already exists");
             } else {
                 console.log("An error occurred: ", error.message);
             }

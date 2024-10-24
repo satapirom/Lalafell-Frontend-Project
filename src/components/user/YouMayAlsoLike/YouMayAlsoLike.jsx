@@ -100,7 +100,7 @@ const YouMayAlsoLike = () => {
             </div>
 
             <div className="relative z-10">
-                <h1 className="text-3xl font-bold mb-6 text-center" data-aos="fade-up">
+                <h1 className="text-2xl table:text-3xl font-bold mb-6 text-center" data-aos="fade-up">
                     <span className="relative inline-block group">
                         <span className="relative inline-block transform hover:scale-110 transition-transform duration-300 cursor-pointer">
                             ✨ You May
@@ -144,7 +144,7 @@ const YouMayAlsoLike = () => {
                             {limitedProducts.map((product, index) => (
                                 <div
                                     key={product._id}
-                                    className="transform transition-all duration-500 hover:scale-105 hover:-translate-y-2"
+                                    className="flex-shrink-0 w-64  tablet:w-auto transform transition-all duration-500 hover:scale-105 hover:-translate-y-2"
                                     style={{
                                         animationDelay: `${index * 100}ms`
                                     }}

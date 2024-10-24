@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { MapPinned } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const Toggle = ({ checked, onChange }) => (
     <div
-        className={`w-11 h-6 flex items-center rounded-full p-1 cursor-pointer ${checked ? 'bg-blue-600' : 'bg-gray-300'}`}
+        className={`w-14 h-10 flex items-center rounded-full p-1 cursor-pointer ${checked ? 'bg-primary-color' : 'bg-primary-color/15'}`}
         onClick={onChange}
     >
         <div
-            className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${checked ? 'translate-x-5' : 'translate-x-0'}`}
+            className={`bg-primary-color w-6 h-6 p-1 rounded-full shadow-md transform duration-300 ease-in-out ${checked ? 'translate-x-5 bg-white/80' : 'translate-x-0'}`}
         />
     </div>
 );
@@ -49,9 +48,9 @@ const AddressForm = ({ address, onSave, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-4">{address ? 'Edit Address' : 'Add Address'}</h2>
-            <div className='flex flex-col'>
+        <form onSubmit={handleSubmit} className="px-4">
+            <h2 className="text-lg font-light mb-4">{address ? 'Edit Address' : 'Add Address'}</h2>
+            <div className='flex flex-col space-y-2'>
                 <input
                     type="text"
                     name="name"
@@ -59,7 +58,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     onChange={handleChange}
                     placeholder="Full Name"
                     required
-                    className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    className="font-light p-3 bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                 />
                 <input
                     type="number"
@@ -69,7 +68,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     placeholder="Phone"
                     maxLength={10}
                     required
-                    className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    className="font-light p-3 bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                 />
                 <input
                     type="text"
@@ -78,7 +77,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     onChange={handleChange}
                     placeholder="Address"
                     required
-                    className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    className="font-light p-3 bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                 />
                 <input
                     type="text"
@@ -87,7 +86,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     onChange={handleChange}
                     placeholder="City"
                     required
-                    className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    className="font-light p-3 bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                 />
                 <input
                     type="text"
@@ -96,6 +95,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     onChange={handleChange}
                     placeholder="State"
                     required
+                    className="font-light p-3 bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                 />
                 <input
                     type="text"
@@ -104,7 +104,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     onChange={handleChange}
                     placeholder="Country"
                     required
-                    className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    className="font-light p-3 bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                 />
                 <input
                     type="text"
@@ -113,14 +113,11 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                     onChange={handleChange}
                     placeholder="Postal Code"
                     required
-                    className="m-2 px-4 py-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"
+                    className="font-light p-3 bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                 />
             </div>
-
-
             <div className='flex items-center mt-4 space-x-2'>
-                <MapPinned color='#3b82f6' size={20} />
-                <span className="text-base text-blue-500">Default Address</span>
+                <span className="text-base text-gray-600 bg-primary-color/15 rounded-full py-2 px-4">Default Address</span>
                 <Toggle
                     checked={formData.isDefault} // Use the local state
                     onChange={handleToggleDefault} // Just call the local toggle function
@@ -128,8 +125,8 @@ const AddressForm = ({ address, onSave, onCancel }) => {
             </div>
 
             <div className="flex justify-end space-x-2 mt-4">
-                <button type="button" onClick={onCancel} className="bg-gray-300 px-4 py-2 rounded">Cancel</button>
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Save</button>
+                <button type="button" onClick={onCancel} className="border border-primary-color hover:bg-primary-color/80 text-gray-800 hover:text-white px-4 py-2 rounded">Cancel</button>
+                <button type="submit" className="bg-primary-color hover:bg-primary-color/80 text-white px-4 py-2 rounded">Save</button>
             </div>
         </form>
     );

@@ -1,12 +1,13 @@
 // Login.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import InputField from "../../components/register/InputField";
-import axiosInstance from "../../utils/axiosInstance";
 import FormValidate from "../../validations/FormValidate.js";
+import toast from 'react-hot-toast';
 import WelcomeBanner from "../../components/register/WelcomeBanner";
-import { Link, useNavigate } from "react-router-dom";
 import Button from "../../components/register/Button";
 import { useAuth } from "../../contexts/AuthContext";
+import { AuthService } from "../../utils/axiosInstance";
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -14,58 +15,76 @@ const Login = () => {
         password: "",
     });
     const [showPassword, setShowPassword] = useState(false);
-    const { setIsLoggedIn, login } = useAuth(); // ใช้ useAuth เพื่อเข้าถึง setIsLoggedIn
+    const [isLoading, setIsLoading] = useState(false);
+    const { login } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        // ถ้ามี token อยู่แล้วและอยู่ที่หน้า login ให้ redirect ไปหน้า home
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({
-            ...formData,
+        setFormData(prev => ({
+            ...prev,
             [name]: value
-        });
+        }));
     };
 
     const togglePasswordVisibility = () => {
-        setShowPassword(!showPassword);
+        setShowPassword(prev => !prev);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
-            const response = await axiosInstance.post('/api/v1/login', {
+            const response = await AuthService.login({
                 username: formData.username,
                 password: formData.password,
             });
 
             if (response.status === 200) {
-                console.log("Response data: ", response.data); // ตรวจสอบข้อมูลที่ตอบกลับ
-                if (response.data.accessToken) { // เปลี่ยนจาก token เป็น accessToken
-                    localStorage.setItem('token', response.data.accessToken); // เก็บ accessToken
-                    login(); // เรียกใช้ login
-                    console.log("Login successful");
-                    navigate('/'); // นำทางไปที่หน้า Home
+                login();
+                toast.success("Login successful");
+
+                // ตรวจสอบ returnUrl จาก URL parameters
+                const params = new URLSearchParams(location.search);
+                const returnUrl = params.get('returnUrl');
+
+                if (returnUrl) {
+                    navigate(decodeURIComponent(returnUrl));
                 } else {
-                    console.log("Token not found in response");
+                    navigate('/');
                 }
-            } else {
-                console.log("Login failed");
             }
         } catch (error) {
-            console.log("An error occurred: ", error.message);
+            console.error("Login error:", error);
+            toast.error(error.response?.data?.message || "Invalid username or password");
+        } finally {
+            setIsLoading(false);
         }
     };
 
-
     return (
         <div className="flex items-center justify-center">
-            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8 w-full max-w-screen-laptopl mt-20  overflow-hidden laptop:grid-cols-2">
+            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-8 w-full max-w-screen-laptopl mt-20 overflow-hidden laptop:grid-cols-2">
                 <WelcomeBanner />
                 <div className="p-8 lg:p-12">
-                    <h2 className="text-2xl laptop:text-3xl font-bold text-gray-800 mb-4">Sign In to Your Account</h2>
-                    <p className="text-gray-600 mb-6">Welcome back! Please log in to continue.</p>
+                    <h2 className="text-2xl laptop:text-3xl font-bold text-gray-800 mb-4">
+                        Sign In to Your Account
+                    </h2>
+                    <p className="text-gray-600 mb-6">
+                        Welcome back! Please log in to continue.
+                    </p>
 
-                    <button className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white  mb-6">
+                    <button className="flex items-center justify-center w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white mb-6">
                         <img
                             src="../images/icon-google1.svg"
                             alt="Google"
@@ -77,7 +96,7 @@ const Login = () => {
                     <form onSubmit={handleSubmit} className="space-y-6">
                         {[
                             {
-                                label: "username",
+                                label: "Username",
                                 type: "text",
                                 name: "username",
                                 value: formData.username,
@@ -106,12 +125,14 @@ const Login = () => {
 
                         <Button
                             type="submit"
+                            disabled={isLoading}
                         >
-                            Sign In
+                            {isLoading ? 'Signing in...' : 'Sign In'}
                         </Button>
                     </form>
+
                     <p className="text-center text-sm text-gray-600 mt-4">
-                        Don't have an account?
+                        Don't have an account?{' '}
                         <Link to="/register" className="text-blue-500 hover:underline">
                             Sign up
                         </Link>

@@ -20,7 +20,7 @@ const Navbar = () => {
 
     return (
         <div className="relative z-100">
-            <div className="fixed top-0 left-0 right-0 z-50 bg-white/60 shadow-sm rounded-b-3xl">
+            <div className="fixed top-0 left-0 right-0 z-50 bg-white/70 shadow-sm rounded-b-3xl">
                 <div className="container mx-auto max-w-screen-laptopl px-4 py-4">
                     <div className="flex justify-between items-center">
                         <div className="flex items-center space-x-4">

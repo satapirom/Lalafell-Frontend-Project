@@ -33,44 +33,44 @@ const SizeFilter = ({ isSizeOpen, toggleSize, handleSizeSelect, selectedSize, on
 
             {isSizeOpen && (
                 <div className='absolute top-full left-0 mt-2 z-30'>
-                    <div className="mb-4 p-4 rounded-lg w-80 shadow-md custom-galssmorpuism">
-                        <h4
+                    <ul className="mb-4 p-4 rounded-lg w-80 shadow-md custom-galssmorpuism">
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('')}
                         >
                             All Sizes
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('100')}
                         >
                             Full Size 100%
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('96')}
                         >
                             Size 96%
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('80')}
                         >
                             Size 80%
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('75')}
                         >
                             Size 75%
-                        </h4>
-                        <h4
+                        </li>
+                        <li
                             className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
                             onClick={() => handleClick('60')}
                         >
                             Size 60%
-                        </h4>
-                    </div>
+                        </li>
+                    </ul>
                 </div>
             )}
         </div>

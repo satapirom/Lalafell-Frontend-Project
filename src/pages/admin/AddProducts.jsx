@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import axiosInstance from '../../utils/axiosInstance';
+import toast, { Toaster } from 'react-hot-toast';
 
 const App = () => {
     const [images, setImages] = useState([]);
@@ -35,7 +36,7 @@ const App = () => {
                 }
             });
             console.log(response.data);
-            alert('Product uploaded successfully!');
+            toast.success('Product uploaded successfully!');
             // Clear form after successful upload
             setImages([]);
             setName('');
@@ -48,7 +49,7 @@ const App = () => {
 
         } catch (error) {
             console.error('Error uploading product:', error);
-            alert('Error uploading product. Please try again.');
+            toast.error('Error uploading product. Please try again.');
         }
     };
 

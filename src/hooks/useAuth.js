@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosInstance from '../utils/axiosInstance';
 import { useNavigate } from 'react-router-dom';
 
 const useAuth = () => {
@@ -8,13 +8,14 @@ const useAuth = () => {
 
     const handleLogout = async () => {
         try {
-            await axios.post('/api/logout');
+            await axiosInstance.post('/logout');
             navigate('/'); // Redirect to home after logout
         } catch (error) {
             console.error('Error during logout:', error);
         }
     };
 
+    //เก็บ state ของ drowdown in navbar
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     };
@@ -22,7 +23,7 @@ const useAuth = () => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                await axios.get('/api/auth/check');
+                await axiosInstance.get('/check');
             } catch (error) {
                 navigate('/login'); // Redirect to login if not authenticated
             }

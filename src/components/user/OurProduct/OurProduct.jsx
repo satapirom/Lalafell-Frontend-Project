@@ -21,7 +21,7 @@ const OurProduct = () => {
             <div className="absolute top-10 left-5 w-32 h-32 bg-[#7986CB]/30 rounded-full blur-3xl"></div>
             <div className="absolute bottom-10 right-5 w-32 h-32 bg-[#5C6BC0]/40 rounded-full blur-2xl"></div>
 
-            <div className="flex flex-col items-center justify-center mb-8" data-aos="fade-up">
+            <div className="flex flex-col items-center justify-center" data-aos="fade-up">
                 <div className="relative mb-6">
                     {/* Sticker-style image with rotation and shadow */}
                     <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 -rotate-12 w-60 h-60">
@@ -37,7 +37,7 @@ const OurProduct = () => {
                     </div>
                 </div>
                 <Link to='/products'>
-                    <h1 className="relative text-4xl font-bold mb-4 z-10 mt-24">
+                    <h1 className="relative text-2xl tablet:text-4xl font-bold mb-4 z-10 mt-24">
                         <span className="relative inline-block text-black transform hover:scale-105 transition-transform duration-300">
                             Our
                             <span className="absolute -top-1 -right-1 text-[#7986CB] text-sm animate-bounce">✧</span>
@@ -66,7 +66,7 @@ const OurProduct = () => {
 
                     </h1>
                 </Link>
-                <p className="text-gray-600 text-center text-lg mt-2 relative">
+                <p className="text-gray-600 text-center text:md tablet:text-lg mt-2 relative">
                     <span className="inline-block transform hover:scale-105 transition-transform duration-300">
                         ✧ Discover
                     </span>
@@ -81,7 +81,7 @@ const OurProduct = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 tablet:grid-cols-3 tablet:gap-4 relative z-10">
+            <div className="grid grid-cols-1 tablet:grid-cols-3 tablet:gap-4 ">
                 <Link to='/products?category=keyboard'>
                     <div
                         data-aos="fade-up"
