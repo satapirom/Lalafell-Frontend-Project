@@ -102,7 +102,7 @@ const Checkout = () => {
 
     return (
         <div className="container mx-auto mt-20">
-            <h1 className="text-3xl font-semibold text-gray-800 mb-4">Checkout</h1>
+            <h1 className="text-2xl tablet:text-3xl font-semibold text-gray-800 mx-2 mb-4">Checkout</h1>
             <div className='custom-bg mt-8 p-8 rounded-lg'>
                 <h2 className="text-lg font-normal pb-6">Items Detail</h2>
                 <div className="custom-glassmorphism shadow-sm">

@@ -49,8 +49,8 @@ const AddressForm = ({ address, onSave, onCancel }) => {
 
     return (
         <form onSubmit={handleSubmit} className="px-4">
-            <h2 className="text-lg font-light mb-4">{address ? 'Edit Address' : 'Add Address'}</h2>
-            <div className='flex flex-col space-y-2'>
+            <h2 className="text-sm tablet:text-lg font-light mb-4">{address ? 'Edit Address' : 'Add Address'}</h2>
+            <div className='flex flex-col space-y-2 '>
                 <input
                     type="text"
                     name="name"

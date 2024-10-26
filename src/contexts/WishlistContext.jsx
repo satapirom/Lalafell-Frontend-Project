@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getWishlistItems } from '../services/wishlistServices';
-import { useAuth } from './AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const WishlistContext = createContext();
 
@@ -8,36 +8,37 @@ export const WishlistProvider = ({ children }) => {
     const [wishlistItems, setWishlistItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { isAuthenticated } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     const fetchWishlist = async () => {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             setWishlistItems([]);
             return;
         }
-
+    
         setIsLoading(true);
         setError(null);
         try {
             const items = await getWishlistItems();
             setWishlistItems(items || []);
         } catch (error) {
-            if (isAuthenticated) {
+            if (isLoggedIn) {  // Use isLoggedIn instead of isAuthenticated
                 setError(error.message);
             }
         } finally {
             setIsLoading(false);
         }
     };
+    
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isLoggedIn) {
             fetchWishlist();
         } else {
             setWishlistItems([]);
             setError(null);
         }
-    }, [isAuthenticated]);
+    }, [isLoggedIn]);
 
     const isInWishlist = (productId) => {
         return wishlistItems.some(item => item._id === productId);

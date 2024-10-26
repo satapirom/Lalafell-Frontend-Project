@@ -1,147 +1,227 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import useProfile from "../../../hooks/user/useProfile";
+import ProfileImage from "../../../components/user/Profile/ProfileImage";
+import CoverImage from "../../../components/user/Profile/CoverImage"; // import CoverImage
+import { useAuth } from "../../../contexts/AuthContext";
 import { BsCameraFill } from "react-icons/bs";
 import { IoSettingsSharp } from "react-icons/io5";
+import { HiOutlineMail } from "react-icons/hi";
 import useUpload from '../../../hooks/user/useUpload.js';
 import { getProfile } from '../../../services/uploadProfileServices.js';
 
 const ProfileForm = () => {
-    const { formData, handleImageChange, handleUpload } = useUpload();
+    // State management
     const [coverImage, setCoverImage] = useState(null);
     const [profileImage, setProfileImage] = useState(null);
     const [message, setMessage] = useState(null);
     const [userData, setUserData] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    
+    // References and hooks
+    const profileRef = useRef(null);
+    const { profile } = useProfile();
+    const { isLoggedIn } = useAuth();
+    const { formData, handleImageChange, handleUpload } = useUpload();
+
+    // File state management
+    const [profileFile, setProfileFile] = useState(null);
+    const [coverFile, setCoverFile] = useState(null);
 
     useEffect(() => {
-        const loadUserProfile = async () => {
-            try {
-                const data = await getProfile();
-                setUserData(data.myUser);
-                if (data.myUser.profileImage && data.myUser.profileImage.length > 0) {
-                    setProfileImage(data.myUser.profileImage[0].url);
-                }
-                if (data.myUser.coverImage && data.myUser.coverImage.length > 0) {
-                    setCoverImage(data.myUser.coverImage[0].url);
-                }
-            } catch (error) {
-                console.error('Error loading user profile:', error);
-                setMessage({ type: 'error', text: 'Failed to load user profile.' });
-            }
-        };
         loadUserProfile();
     }, []);
 
-    const handleCoverImageChange = (e) => {
-        if (e.target.files[0]) {
-            setCoverImage(URL.createObjectURL(e.target.files[0]));
-            handleImageChange([null, e.target.files[0]]);
+    const loadUserProfile = async () => {
+        try {
+            setIsLoading(true);
+            const data = await getProfile();
+            setUserData(data.myUser);
+            
+            // Set initial images if they exist
+            if (data.myUser.profileImage?.[0]?.url) {
+                setProfileImage(data.myUser.profileImage[0].url);
+            }
+            if (data.myUser.coverImage?.[0]?.url) {
+                setCoverImage(data.myUser.coverImage[0].url);
+            }
+        } catch (error) {
+            console.error('Error loading user profile:', error);
+            setMessage({ type: 'error', text: 'Failed to load user profile.' });
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    const handleProfileImageChange = (e) => {
-        if (e.target.files[0]) {
-            setProfileImage(URL.createObjectURL(e.target.files[0]));
-            handleImageChange([e.target.files[0], null]);
+    const handleCoverImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                // Create preview
+                const preview = URL.createObjectURL(file);
+                setCoverImage(preview);
+                setCoverFile(file);
+                
+                // Prepare form data for upload
+                const formData = new FormData();
+                formData.append('coverImage', file);
+                handleImageChange([null, file]);
+                
+            } catch (error) {
+                console.error('Error handling cover image:', error);
+                setMessage({ type: 'error', text: 'Error processing cover image.' });
+            }
+        }
+    };
+
+    const handleProfileImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                // Create preview
+                const preview = URL.createObjectURL(file);
+                setProfileImage(preview);
+                setProfileFile(file);
+                
+                // Prepare form data for upload
+                const formData = new FormData();
+                formData.append('profileImage', file);
+                handleImageChange([file, null]);
+                
+            } catch (error) {
+                console.error('Error handling profile image:', error);
+                setMessage({ type: 'error', text: 'Error processing profile image.' });
+            }
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+        setMessage(null);
+
         try {
+            // Handle the upload
             await handleUpload();
-            const updatedData = await getProfile();
-            setUserData(updatedData.myUser);
-            if (updatedData.myUser.profileImage && updatedData.myUser.profileImage.length > 0) {
-                setProfileImage(updatedData.myUser.profileImage[0].url);
-            }
-            if (updatedData.myUser.coverImage && updatedData.myUser.coverImage.length > 0) {
-                setCoverImage(updatedData.myUser.coverImage[0].url);
-            }
-            setMessage({ type: 'success', text: 'Profile and cover updated successfully!' });
+            
+            // Refresh profile data
+            await loadUserProfile();
+            
+            setMessage({ type: 'success', text: 'Profile updated successfully!' });
+            
+            // Clear file states after successful upload
+            setProfileFile(null);
+            setCoverFile(null);
+            
         } catch (error) {
-            console.error('Error uploading profile or cover:', error);
-            setMessage({ type: 'error', text: 'Failed to update profile. Please try again.' });
+            console.error('Error uploading images:', error);
+            setMessage({ 
+                type: 'error', 
+                text: 'Failed to update profile. Please try again.' 
+            });
+        } finally {
+            setIsLoading(false);
         }
     };
 
-    if (!userData) {
-        return <div>Loading...</div>;
-    }
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-64">Loading...</div>;
+    };
 
     return (
-        <div className="max-w-screen-lg mx-auto">
+        <div className="relative">
             {message && (
-                <div className={`p-4 mb-4 rounded ${message.type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
+                    message.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                }`}>
                     {message.text}
                 </div>
             )}
-            <form onSubmit={handleSubmit}>
+            
+            <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="relative">
-                    {/* Cover Photo */}
-                    <div className="h-64 bg-gray-200 rounded-2xl relative">
-                        {coverImage ? (
-                            <img
-                                src={coverImage}
-                                alt="Cover"
-                                className="w-full h-full object-cover rounded-2xl"
+                    {/* Cover Photo Section */}
+                    <div className="relative">
+                        <CoverImage coverUrl={coverImage} />
+                        <label 
+                            htmlFor="cover-upload" 
+                            className="absolute bottom-4 right-4 bg-white/70 p-2 rounded-full cursor-pointer hover:bg-white/90 transition-colors"
+                        >
+                            <BsCameraFill size={24} className="text-gray-700" />
+                            <input 
+                                id="cover-upload" 
+                                type="file" 
+                                className="hidden" 
+                                onChange={handleCoverImageChange} 
+                                accept="image/*"
                             />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-gray-400">
-                                <span className="text-gray-700">No Cover Image</span>
+                        </label>
+                    </div>
+
+                    {/* Profile Picture Section */}
+                    <div className="absolute -bottom-16 left-4" ref={profileRef}>
+                        <div className="relative">
+                            <div className="bg-gray-300 rounded-full border-4 border-white overflow-hidden">
+                                <ProfileImage 
+                                    imageUrl={profileImage} 
+                                    username={userData?.username} 
+                                    size={128}
+                                />
                             </div>
-                        )}
-                        <label htmlFor="cover-upload" className="absolute bottom-4 right-4 bg-white/70 p-2 rounded-full cursor-pointer">
-                            <BsCameraFill size={24} color='#374151' />
-                            <input id="cover-upload" type="file" className="hidden" onChange={handleCoverImageChange} accept="image/*" />
-                        </label>
-                    </div>
-
-                    {/* Profile Picture */}
-                    <div className="absolute -bottom-16 left-4">
-                        <div className="w-32 h-32 bg-gray-300 rounded-full border-4 border-white overflow-hidden">
-                            {profileImage ? (
-                                <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center">
-                                    <span className="text-4xl">{userData.username ? userData.username[0].toUpperCase() : 'U'}</span>
-                                </div>
-                            )}
-                        </div>
-                        <label htmlFor="profile-upload" className="absolute bottom-0 right-0 bg-white p-2 rounded-full cursor-pointer">
-                            <BsCameraFill size={16} color='#374151' />
-                            <input id="profile-upload" type="file" className="hidden" onChange={handleProfileImageChange} accept="image/*" />
-                        </label>
-                    </div>
-                </div>
-
-                <div className="mt-20 grid grid-cols-2">
-                    <div className="col-span-1">
-                        <div>
-                            {userData.username ? (
-                                <h1 className="text-3xl text-gray-800  font-bold">{userData.username}</h1>
-                            ) : (
-                                <h1 className="text-3xl text-gray-800  font-bold">Username</h1>
-                            )}
-                        </div>
-                        <div className="col-span-1">
-                            {userData.email ? (
-                                <h4 className="text-lg text-gray-500 ">{userData.email}</h4>
-                            ) : (
-                                <h4 className="text-lg text-gray-800 ">Email</h4>
-                            )}
-                        </div>
-                    </div>
-                    <div className='col-span-1'>
-                        <div className=" flex justify-end items-center px-4 space-x-2 text-center">
-                            <Link to='/settings'>
-                                <IoSettingsSharp size={24} color='#374151' className="cursor-pointer" />
-                            </Link>
-                            <button type="submit" className="bg-gray-200 text-gray-700 px-4 py-2 rounded">Edit</button>
+                            <label 
+                                htmlFor="profile-upload" 
+                                className="absolute bottom-0 right-0 bg-white p-2 rounded-full cursor-pointer hover:bg-gray-100 transition-colors"
+                            >
+                                <BsCameraFill size={16} className="text-gray-700" />
+                                <input 
+                                    id="profile-upload" 
+                                    type="file" 
+                                    className="hidden" 
+                                    onChange={handleProfileImageChange} 
+                                    accept="image/*"
+                                />
+                            </label>
                         </div>
                     </div>
                 </div>
-            </form >
-        </div >
+
+                {/* User Info Section */}
+                <div className=" grid grid-cols-2 gap-4">
+                    <div className="space-y-2 mt-12">
+                        <h1 className="text-3xl text-gray-800 font-bold">
+                            {userData?.username || 'Username'}
+                        </h1>
+                        <h4 className="flex items-center text-lg text-gray-500">
+    <span className="mr-2" aria-hidden="true">
+        <HiOutlineMail />
+    </span>
+    {userData?.email || 'Email'}
+</h4>
+
+                    </div>
+                    
+                    <div className="flex justify-end items-center space-x-4">
+                        <Link 
+                            to="/settings"
+                            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                        >
+                            <IoSettingsSharp size={24} className="text-gray-700" />
+                        </Link>
+                        <button
+                            type="submit"
+                            disabled={isLoading}
+                            className={`px-6 py-2 rounded-lg ${
+                                isLoading
+                                    ? 'bg-gray-300 cursor-not-allowed'
+                                    : 'bg-gray-200 hover:bg-gray-300 transition-colors'
+                            } text-gray-700`}
+                        >
+                            {isLoading ? 'Updating...' : 'Save Changes'}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     );
 };
 

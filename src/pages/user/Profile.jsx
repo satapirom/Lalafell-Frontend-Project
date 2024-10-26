@@ -7,7 +7,7 @@ import YouMayAlsoLike from '../../components/user/YouMayAlsoLike/YouMayAlsoLike'
 
 const Profile = () => {
     return (
-        <div className='container mx-auto  mt-16 py-4  max-w-screen-laptopl'>
+        <div className='container mx-auto  max-w-screen-laptopl'>
             <ProfileForm />
             <OrderDashboard />
             <PurchaseHistory />
