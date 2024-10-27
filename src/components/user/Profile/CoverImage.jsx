@@ -14,10 +14,10 @@ const CoverImage = ({ coverUrl }) => {
           src={coverUrl}
           alt="Cover"
           onError={handleImageError}
-          className="w-full h-80 object-cover rounded-lg" // ขนาดของ Cover Image
+          className="w-full h-80 object-cover tablet:rounded-lg" 
         />
       ) : (
-        <div className="w-full h-64 bg-gray-400 flex items-center justify-center rounded-lg">
+        <div className="w-full h-64 bg-gray-400 flex items-center justify-center tablat:rounded-lg">
           <span className="text-gray-700">No Cover Image</span>
         </div>
       )}

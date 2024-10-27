@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getWishlistItems } from '../services/wishlistServices';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from './AuthContext';
 
 const WishlistContext = createContext();
 
@@ -15,33 +15,28 @@ export const WishlistProvider = ({ children }) => {
             setWishlistItems([]);
             return;
         }
-    
+
         setIsLoading(true);
         setError(null);
         try {
-            const items = await getWishlistItems();
-            setWishlistItems(items || []);
-        } catch (error) {
-            if (isLoggedIn) {  // Use isLoggedIn instead of isAuthenticated
-                setError(error.message);
-            }
+            const data = await getWishlistItems();
+            setWishlistItems(data);
+        } catch (err) {
+            setError(err.message);
+            console.error('Error fetching wishlist:', err);
         } finally {
             setIsLoading(false);
         }
     };
-    
 
     useEffect(() => {
         if (isLoggedIn) {
             fetchWishlist();
-        } else {
-            setWishlistItems([]);
-            setError(null);
         }
     }, [isLoggedIn]);
 
     const isInWishlist = (productId) => {
-        return wishlistItems.some(item => item._id === productId);
+        return wishlistItems.some(item => item.product._id === productId);
     };
 
     return (
@@ -57,11 +52,11 @@ export const WishlistProvider = ({ children }) => {
     );
 };
 
-
 export const useWishlist = () => {
     const context = useContext(WishlistContext);
-    if (context === undefined) {
+    if (!context) {
         throw new Error('useWishlist must be used within a WishlistProvider');
     }
     return context;
 };
+

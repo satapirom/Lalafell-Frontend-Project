@@ -102,17 +102,25 @@ const AddressManagement = () => {
 
     // AddressManagement Component
     return (
-        <div className="space-y-6 p-6 max-w-screen-laptopl custom-bg mx-auto">
+        <div className="p-6 max-w-screen-laptopl custom-bg mx-auto">
             <div className="flex justify-between items-center border-b pb-4 mb-4">
-                <h2 className="text-lg font-semibold text-gray-800">Manage Addresses</h2>
+                <h2 className="text-sm text:text-lg font-semibold text-gray-800">Manage Addresses</h2>
                 <button
                     onClick={handleAddAddress}
-                    className="bg-primary-color text-white px-6 py-2 rounded-md hover:bg-primary-color/80 transition duration-200 flex items-center"
+                    className="bg-primary-color text-white px-4 tablet:px-6 py-2 rounded-md hover:bg-primary-color/80 transition duration-200 flex items-center"
                 >
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                    <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 24 24" 
+                    color="#ffffff" 
+                    fill="none"
+                    className='w-4 h-4 tablet:w-5 tablet:h-5'
+                    >
                         <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
+                    <span className='hidden tablet:block'>
                     Add New Address
+                    </span>
                 </button>
             </div>
 
@@ -127,13 +135,13 @@ const AddressManagement = () => {
                 </div>
             )}
 
-            <ul className="space-y-4">
+            <ul className="space-y-4 overflow-hidden text-ellipsis whitespace-nowrap">
                 {addresses.length > 0 ? (
                     addresses.map((address) => (
-                        <li key={address._id} className="border-b px-8 pb-6">
-                            <div>
-                                <h3 className="font-normal text-sm tablet:text-lg mb-2">{address.name} | {address.phone} </h3>
-                                <p className="text-sm tablet:text-lg text-gray-700 mb-2">
+                        <li key={address._id} className="border-b tablet:px-8 pb-6 overflow-hidden text-ellipsis whitespace-pre-line break-words">
+                            <div className='overflow-hidden text-ellipsis break-words'>
+                                <h3 className="font-normal text-sm tablet:text-lg mb-2 ">{address.name} | {address.phone} </h3>
+                                <p className="text-sm tablet:text-lg text-gray-700 mb-2 ">
                                     {address.street},&nbsp;
                                     {address.city},&nbsp;
                                     {address.state},&nbsp;
@@ -179,9 +187,6 @@ const AddressManagement = () => {
             </ul>
         </div>
     );
-
-
-
 };
 
 export default AddressManagement;

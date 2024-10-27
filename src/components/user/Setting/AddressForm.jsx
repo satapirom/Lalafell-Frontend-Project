@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 const Toggle = ({ checked, onChange }) => (
     <div
-        className={`w-14 h-10 flex items-center rounded-full p-1 cursor-pointer ${checked ? 'bg-primary-color' : 'bg-primary-color/15'}`}
+        className={`w-12 tablet:w-14 h-8 tablet:h-10 flex items-center rounded-full p-1 cursor-pointer ${checked ? 'bg-primary-color' : 'bg-primary-color/15'}`}
         onClick={onChange}
     >
         <div
@@ -48,7 +48,7 @@ const AddressForm = ({ address, onSave, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="px-4">
+        <form onSubmit={handleSubmit} className="tablet:px-4">
             <h2 className="text-sm tablet:text-lg font-light mb-4">{address ? 'Edit Address' : 'Add Address'}</h2>
             <div className='flex flex-col space-y-2 '>
                 <input
@@ -117,15 +117,15 @@ const AddressForm = ({ address, onSave, onCancel }) => {
                 />
             </div>
             <div className='flex items-center mt-4 space-x-2'>
-                <span className="text-base text-gray-600 bg-primary-color/15 rounded-full py-2 px-4">Default Address</span>
+                <span className="text-xs tablet:text-base text-gray-600 bg-primary-color/15 rounded-full py-2 px-4">Default Address</span>
                 <Toggle
                     checked={formData.isDefault} // Use the local state
                     onChange={handleToggleDefault} // Just call the local toggle function
                 />
             </div>
 
-            <div className="flex justify-end space-x-2 mt-4">
-                <button type="button" onClick={onCancel} className="border border-primary-color hover:bg-primary-color/80 text-gray-800 hover:text-white px-4 py-2 rounded">Cancel</button>
+            <div className="flex justify-end space-x-2 my-4">
+                <button type="button" onClick={onCancel} className="border border-primary-color hover:bg-primary-color/80 text-sm text-gray-800 hover:text-white px-4 py-2 rounded">Cancel</button>
                 <button type="submit" className="bg-primary-color hover:bg-primary-color/80 text-white px-4 py-2 rounded">Save</button>
             </div>
         </form>

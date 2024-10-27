@@ -45,7 +45,7 @@ const ProductCard = ({ product }) => {
         if (!description) return null;
 
         const isMobile = window.innerWidth < 600;
-        const maxLength = isMobile ? 10 : 60;
+        const maxLength = isMobile ? 30 : 60;
 
         const truncatedDescription = description.length > maxLength
             ? `${description.slice(0, maxLength)}...`

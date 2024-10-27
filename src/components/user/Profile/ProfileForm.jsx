@@ -129,7 +129,7 @@ const ProfileForm = () => {
     };
 
     return (
-        <div className="relative">
+        <div className="relative ">
             {message && (
                 <div className={`fixed top-4 right-4 p-4 rounded-lg shadow-lg z-50 ${
                     message.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
@@ -188,11 +188,11 @@ const ProfileForm = () => {
                 {/* User Info Section */}
                 <div className=" grid grid-cols-2 gap-4">
                     <div className="space-y-2 mt-12">
-                        <h1 className="text-3xl text-gray-800 font-bold">
+                        <h1 className="text-3xl mx-2 text-gray-800 font-bold">
                             {userData?.username || 'Username'}
                         </h1>
                         <h4 className="flex items-center text-lg text-gray-500">
-    <span className="mr-2" aria-hidden="true">
+    <span className="mx-2" aria-hidden="true">
         <HiOutlineMail />
     </span>
     {userData?.email || 'Email'}
@@ -200,7 +200,7 @@ const ProfileForm = () => {
 
                     </div>
                     
-                    <div className="flex justify-end items-center space-x-4">
+                    <div className="flex justify-end items-center space-x-2">
                         <Link 
                             to="/settings"
                             className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -216,7 +216,7 @@ const ProfileForm = () => {
                                     : 'bg-gray-200 hover:bg-gray-300 transition-colors'
                             } text-gray-700`}
                         >
-                            {isLoading ? 'Updating...' : 'Save Changes'}
+                            {isLoading ? 'Updating...' : 'Save '}
                         </button>
                     </div>
                 </div>
