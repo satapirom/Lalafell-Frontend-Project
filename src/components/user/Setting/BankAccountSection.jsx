@@ -101,11 +101,10 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
     }
 
     return (
-        <div className='p-8'>
+        <div className='p-2 tablet:p-8'>
             {error && <div className="text-red-500">{error}</div>}
             <div className='flex justify-between'>
                 <div>
-                    <h2 className=" mt-6">Bank Accounts</h2>
                     {accounts.length === 0 ? (
                         <p>No bank accounts found. Add a new payment to get started.</p>
                     ) : (
@@ -117,27 +116,33 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
                         onClick={handleAddBankAccount}
                         className="bg-primary-color text-white px-6 py-2 rounded-md hover:bg-primary-color/80 transition duration-200 flex items-center"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#ffffff" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                        viewBox="0 0 24 24" 
+                        color="#ffffff" 
+                        fill="none"
+                        className='w-4 h-4 tablet:w-6 tablet:h-6'>
                             <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
+                        <span className='hidden laptop:block ml-2'>
                         Add Bank Account
+                        </span>
                     </button>
                 </div>
             </div>
             {accounts.length > 0 && (
-                <ul className="divide-y divide-gray-200 p-4">
+                <ul className="divide-y divide-gray-200 p-2 tablet:p-4">
                     {accounts.map((account, index) => (
                         <li key={account._id || index} className="p-4 flex items-center justify-between hover:bg-gray-100 rounded-lg">
                             <div className="flex items-center space-x-4">
                                 <ul className="space-y-1 text-sm leading-relaxed">
                                     <li className="font-medium">
-                                        Bank Account Name: <span className="font-normal">{account.bankName}</span>
+                                       {account.bankName}
                                     </li>
-                                    <li className="font-medium">
-                                        Account Name: <span className="font-normal">{account.accountHolderName}</span>
+                                    <li className="font-light">
+                                       {account.accountHolderName}
                                     </li>
-                                    <li className="font-medium">
-                                        Account Number: <span className="font-normal">{account.accountNumber}</span>
+                                    <li className="font-light">
+                                       {account.accountNumber}
                                     </li>
                                 </ul>
 

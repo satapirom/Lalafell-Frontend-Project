@@ -200,7 +200,7 @@ const ProfileForm = () => {
 
                     </div>
                     
-                    <div className="flex justify-end items-center space-x-2">
+                    <div className="flex justify-end items-center space-x-2 mx-2">
                         <Link 
                             to="/settings"
                             className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -210,7 +210,7 @@ const ProfileForm = () => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className={`px-6 py-2 rounded-lg ${
+                            className={`px-6 py-2  rounded-lg ${
                                 isLoading
                                     ? 'bg-gray-300 cursor-not-allowed'
                                     : 'bg-gray-200 hover:bg-gray-300 transition-colors'
