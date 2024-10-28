@@ -83,10 +83,10 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
     };
 
     return (
-        <div className="space-y-6 max-w-md mx-auto">
+        <div className="mx-auto">
             <form onSubmit={handleSubmit}>
                 <div
-                    className="relative h-56 w-full"
+                    className="relative h-56 w-full max-w-md mx-auto  justify-center bg-white rounded-lg shadow-sm"
                     style={{
                         perspective: '1000px',
                         transformStyle: 'preserve-3d'
@@ -104,19 +104,23 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
                     >
                         {/* Front of the card */}
                         <div
-                            className="absolute w-full h-full rounded-3xl shadow-xl overflow-hidden"
+                            className="absolute w-full h-full rounded-2xl shadow-xl overflow-hidden"
                             style={{
                                 backfaceVisibility: 'hidden',
                                 WebkitBackfaceVisibility: 'hidden',
-                                background: 'linear-gradient(135deg, #FFB6C1, #FFC0CB, #FFD700)',
+                                background: "linear-gradient(to right, #F3F4F6, #E5E7EB)",
                                 border: '4px solid #FFF',
+
+
+
+                                
                                 boxShadow: '0 4px 8px rgba(0,0,0,0.1), 0 0 0 4px #FFF inset'
                             }}
                         >
                             <div className="absolute top-4 left-4 right-4 bottom-4 flex flex-col justify-between text-white">
                                 <div className="flex justify-between items-center">
                                     <Heart className="h-8 w-8 text-red-500" />
-                                    <div className="text-lg font-bold text-pink-700">Cute Card</div>
+                                    <div className="text-lg font-bold text-primary-color">Cute Card</div>
                                 </div>
                                 <div className="text-2xl tracking-wider text-pink-700">
                                     {formData.cardNumber || '•••• •••• •••• ••••'}
@@ -161,7 +165,7 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
 
                 <div className="space-y-4 mt-4">
                     <input
-                        className="w-full p-2 border rounded-xl border-pink-300 focus:border-pink-500 focus:outline-none"
+                        className="font-light text-xs tablet:text-base p-3 w-full bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                         placeholder="Card Number"
                         name="cardNumber"
                         type="text"
@@ -170,7 +174,7 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
                         maxLength={19}
                     />
                     <input
-                        className="w-full p-2 border rounded-xl border-pink-300 focus:border-pink-500 focus:outline-none"
+                        className="font-light text-xs tablet:text-base p-3 w-full bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                         placeholder="Name on Card"
                         name="accountHolderName"
                         type="text"
@@ -179,7 +183,7 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
                     />
                     <div className="flex justify-between w-full space-x-4">
                         <DatePicker
-                            className="w-80 p-2 border rounded-xl border-pink-300 focus:border-pink-500 focus:outline-none"
+                            className="font-light text-xs tablet:text-base p-3 w-full bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                             placeholderText="Expiry Date (MM/YY)"
                             selected={formData.expiryDate}
                             onChange={handleExpiryChange}
@@ -187,7 +191,7 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
                             showMonthYearPicker
                         />
                         <input
-                            className="w-1/4 p-2 border rounded-xl border-pink-300 focus:border-pink-500 focus:outline-none"
+                           className="font-light  text-xs tablet:text-base p-3 w-full bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                             placeholder="CVV"
                             name="cvv"
                             value={formData.cvv}
@@ -203,12 +207,12 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="bg-gray-300 px-4 py-2 rounded"
+                        className="font-light  text-xs tablet:text-base border border-primary-color hover:bg-primary-color/80 hover:text-white px-4 py-2 rounded"
                     >
                         Cancel
                     </button>
                     <button
-                        className="w-full bg-pink-500 text-white p-2 rounded-md hover:bg-pink-600 transition-colors mt-4 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
+                        className="font-light  text-xs tablet:text-base w-full bg-primary-color text-white p-2 rounded-md hover:bg-primary-color/80 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50"
                         type="submit"
                     >
                         {editingCard ? 'Update Card with Love ♥' : 'Pay with Love ♥'}

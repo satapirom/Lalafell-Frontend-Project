@@ -8,10 +8,10 @@ export const WishlistProvider = ({ children }) => {
     const [wishlistItems, setWishlistItems] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const { isAuthenticated } = useAuth();
+    const { isLoggedIn } = useAuth();
 
     const fetchWishlist = async () => {
-        if (!isAuthenticated) {
+        if (!isLoggedIn) {
             setWishlistItems([]);
             return;
         }
@@ -19,28 +19,24 @@ export const WishlistProvider = ({ children }) => {
         setIsLoading(true);
         setError(null);
         try {
-            const items = await getWishlistItems();
-            setWishlistItems(items || []);
-        } catch (error) {
-            if (isAuthenticated) {
-                setError(error.message);
-            }
+            const data = await getWishlistItems();
+            setWishlistItems(data);
+        } catch (err) {
+            setError(err.message);
+            console.error('Error fetching wishlist:', err);
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        if (isAuthenticated) {
+        if (isLoggedIn) {
             fetchWishlist();
-        } else {
-            setWishlistItems([]);
-            setError(null);
         }
-    }, [isAuthenticated]);
+    }, [isLoggedIn]);
 
     const isInWishlist = (productId) => {
-        return wishlistItems.some(item => item._id === productId);
+        return wishlistItems.some(item => item.product._id === productId);
     };
 
     return (
@@ -56,11 +52,11 @@ export const WishlistProvider = ({ children }) => {
     );
 };
 
-
 export const useWishlist = () => {
     const context = useContext(WishlistContext);
-    if (context === undefined) {
+    if (!context) {
         throw new Error('useWishlist must be used within a WishlistProvider');
     }
     return context;
 };
+

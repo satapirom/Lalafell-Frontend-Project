@@ -1,6 +1,6 @@
 const SettingsItem = ({ icon, title, description, isActive, onClick }) => (
     <div
-        className={`flex items-center p-4 rounded-lg cursor-pointer transition-all ${isActive ? 'bg-blue-100 border-l-4 border-primary-color' : 'hover:bg-primary-color/15'}
+        className={`flex items-center p-4 m-2 tablet:m-0 rounded-lg cursor-pointer transition-all ${isActive ? 'bg-blue-100 border-l-4 border-primary-color' : 'hover:bg-primary-color/15'}
             }`}
         onClick={onClick}
     >
