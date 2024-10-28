@@ -180,8 +180,8 @@ const AddressManagement = () => {
                         </li>
                     ))
                 ) : (
-                    <div className='text-center py-8'>
-                        <p className="text-gray-500">No addresses found. Add a new address to get started.</p>
+                    <div className='text-center py-8 truncate'>
+                        <p className="text-gray-500 text-sm tablet:text-base truncate">No addresses found. Add a new address to get started.</p>
                     </div>
                 )}
             </ul>

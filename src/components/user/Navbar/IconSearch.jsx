@@ -138,7 +138,7 @@ const ProductSearch = () => {
                     <input
                         type="text"
                         placeholder={getRandomPlaceholder()}
-                        className="py-2 px-4 m-1 w-32 tablet:min-w-96 text-sm font-light rounded-full outline-none transition-all duration-300 bg-white text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-primary-color focus:ring-opacity-50"
+                        className="py-2 px-4 m-1 mim-w-32 tablet:min-w-96 text-sm font-light rounded-full outline-none transition-all duration-300 bg-white text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-primary-color focus:ring-opacity-50"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleKeyDown}
