@@ -52,29 +52,29 @@ const PaymentBankAccountForm = ({ onClose, onSavePaymentMethod, onCancel, initia
     };
 
     return (
-        <div className="space-y-6 max-w-md mx-auto bg-gradient-to-br from-pink-100 to-yellow-100 p-6 rounded-3xl shadow-lg border-4 border-white">
+        <div className="space-y-6 p-4 tablet:p-8 custom-galssmorpuism">
             <form onSubmit={handleSubmit}>
                 {/* Bank Dropdown */}
                 <div className="space-y-4">
-                    <div>
-                        <label className="block text-pink-700 font-medium mb-1">Bank Name</label>
+                    <div >
+                        <label className="block text-xs tablet:text-base mb-1">Bank Name</label>
                         <div className="relative" onClick={() => setDropdownOpen(!dropdownOpen)}>
-                            <div className="w-full p-3 bg-white border-2 border-pink-300 rounded-2xl shadow-md flex items-center justify-between cursor-pointer">
+                            <div className="w-full p-3 custom-bg border-b rounded-md text-xs tablet:text-base flex items-center justify-between cursor-pointer">
                                 <span>{formData.bankName || 'Select a bank'}</span>
-                                <span className="text-pink-700">
+                                <span className="">
                                     <Banknote className="h-6 w-6" />
                                 </span>
                             </div>
 
                             {dropdownOpen && (
-                                <div className="absolute w-full mt-1 bg-white border-2 border-pink-300 rounded-2xl shadow-lg z-10">
+                                <div className="absolute w-full mt-1 bg-white  rounded-lg z-10">
                                     {bankOptions.map((bank) => (
                                         <div
                                             key={bank.value}
-                                            className="flex items-center p-3 hover:bg-pink-100 cursor-pointer transition-colors"
+                                            className="flex items-center text-xs tablet:text-base m-2 p-2 rounded-md hover:bg-primary-color/15 active:ring-primary-color cursor-pointer transition-colors"
                                             onClick={() => handleBankSelect(bank)}
                                         >
-                                            <span className="text-pink-700 font-medium">{bank.label}</span>
+                                            <span className="">{bank.label}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -84,58 +84,52 @@ const PaymentBankAccountForm = ({ onClose, onSavePaymentMethod, onCancel, initia
 
                     {/* Account Number Input */}
                     <div>
-                        <label className="block text-pink-700 font-medium mb-1">Account Number</label>
+                        <label className="block text-xs tablet:text-base mb-1 active:ring-primary-color">Account Number</label>
                         <input
                             type="number"
                             name="accountNumber"
                             value={formData.accountNumber}
                             onChange={handleInputChange}
                             placeholder="Enter your account number"
-                            className="w-full p-3 bg-white border-2 border-pink-300 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-pink-400"
+                          className="font-light text-xs tablet:text-base p-3 w-full bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                             required
                         />
                     </div>
 
                     {/* Account Holder Name Input */}
                     <div>
-                        <label className="block text-pink-700 font-medium mb-1">Account Name</label>
+                        <label className="block text-xs tablet:text-base mb-1">Account Name</label>
                         <input
                             type="text"
                             name="accountHolderName"
                             value={formData.accountHolderName}
                             onChange={handleInputChange}
                             placeholder="Enter account holder's name"
-                            className="w-full p-3 bg-white border-2 border-pink-300 rounded-2xl shadow-md focus:outline-none focus:ring-2 focus:ring-pink-400"
-                            required
+                          className="font-light text-xs tablet:text-base p-3 w-full bg-transparent rounded-lg border-b focus:outline-none focus:border focus:border-primary-color"
                         />
                     </div>
                 </div>
 
                 {/* Instructions */}
-                <div className="bg-white p-4 rounded-2xl shadow-md mt-6">
-                    <h2 className="text-lg font-semibold text-pink-700 mb-2">Instructions</h2>
-                    <p className="text-pink-600">
+                <div className="text-xs tablet:text-base mt-4">
+                    <h2 className="text-xs tablet:text-base mb-2">Instructions</h2>
+                    <p className="">
                         Please select your bank and enter the account details carefully. Ensure the information matches your bank account to avoid any issues.
                     </p>
                 </div>
 
-                {/* Icon */}
-                <div className="flex justify-center mt-4">
-                    <Smartphone className="h-16 w-16 text-pink-500" />
-                </div>
-
                 {/* Submit Button */}
-                <div className="flex justify-center mt-6 space-x-4">
+                <div className="flex justify-center tablet:justify-end mt-6 text-xs tablet:text-base space-x-4">
                     <button
                         type="button"
                         onClick={onCancel}
-                        className="bg-gray-300 px-4 py-2 rounded-2xl hover:bg-gray-400 transition-colors"
+                        className="border border-primary-color px-4 py-2 rounded-md hover:text-white hover:bg-primary-color/80 transition-colors"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="bg-pink-500 text-white px-6 py-3 rounded-2xl shadow-lg hover:bg-pink-600 transition-colors"
+                        className="bg-primary-color text-white px-6 py-3 rounded-md  hover:bg-primary-color/80 transition-colors"
                     >
                         {initialData ? 'Update Bank Account' : 'Add Bank Account'}
                     </button>

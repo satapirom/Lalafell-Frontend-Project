@@ -113,8 +113,7 @@ const CreditCardSection = () => {
             {error && <div className="text-red-500 bg-red-100 p-2 rounded">{error}</div>}
             <div className='flex justify-between items-center'>
                 <div>
-                    <h2 className="text-lg font-semibold">Credit/Debit Cards</h2>
-                    <p className="text-sm text-gray-600">
+                    <p className="bg-primary-color/15 rounded-full px-4 py-1">
                         {cards.length === 0
                             ? "No credit/debit cards found. Add a new payment to get started."
                             : `${cards.length} credit/debit card${cards.length !== 1 ? 's' : ''} found.`}
@@ -122,18 +121,27 @@ const CreditCardSection = () => {
                 </div>
                 <button
                     onClick={handleAddCreditCard}
-                    className="bg-blue-500 text-white px-4 py-2 rounded transition duration-150 ease-in-out hover:bg-blue-600 disabled:opacity-50"
+                   
                     disabled={isLoading}
-                >
-                    + Add New Card
-                </button>
+                    className="bg-primary-color text-white px-6 py-2 rounded-md hover:bg-primary-color/80 transition duration-200 flex items-center"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" 
+                        viewBox="0 0 24 24" 
+                        color="#ffffff" 
+                        fill="none"
+                        className='w-4 h-4 tablet:w-6 tablet:h-6'>
+                            <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span className='hidden laptop:block ml-2'>
+                        Add Credit Card
+                        </span>
+                    </button>
             </div>
             {cards.length > 0 && (
                 <ul className="divide-y divide-gray-200">
                     {cards.map((card) => (
                         <li key={card._id} className="py-4 flex items-center justify-between">
                             <div className="flex items-center space-x-4">
-                                <CreditCard className="h-8 w-8 text-purple-500" />
                                 <div className="min-w-0">
                                     <p className="text-sm font-medium text-gray-900 truncate">
                                         **** **** **** {card.lastFourDigits}
