@@ -23,7 +23,6 @@ const CartPage = () => {
 
     const navigate = useNavigate();
 
-    // Listen for cart updates
     useEffect(() => {
         const unsubscribe = cartEventEmitter.subscribe(refreshCart);
         return () => unsubscribe();
@@ -42,17 +41,17 @@ const CartPage = () => {
 
     const handleQuantityUpdate = async (productId, change) => {
         await handleUpdateQuantity(productId, change);
-        cartEventEmitter.emit(); // Emit cart update event
+        cartEventEmitter.emit();
     };
 
     const handleItemRemoval = async (productId) => {
         await handleRemoveItem(productId);
-        cartEventEmitter.emit(); // Emit cart update event
+        cartEventEmitter.emit();
     };
 
     const handleSelectedItemsRemoval = async () => {
         await handleRemoveSelectedItems();
-        cartEventEmitter.emit(); // Emit cart update event
+        cartEventEmitter.emit();
     };
 
     if (isLoading) {
@@ -64,18 +63,26 @@ const CartPage = () => {
     }
 
     return (
-        <div className="container mx-auto mt-20">
-            <div className='custom-bg rounded-lg p-8'>
-                <div className='flex items-center gap-2 mb-6 w-full'>
+        <div className="container mx-auto mt-20 px-4 tablet:px-8">
+            <div className='custom-bg rounded-lg p-4 tablet:p-8'>
+                <div className='flex items-center gap-2 mb-4 tablet:mb-6'>
                     <span>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" color="#000000" fill="none">
-                            <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7187 10.6318 21.6188 10.7251 21.5 10.8013M7.5 8H3.80397C3.17922 8 2.86684 8 2.63812 8.10084C1.6264 8.5469 2.07874 9.67075 2.24894 10.4784C2.27952 10.6235 2.37896 10.747 2.51841 10.8132C3.09673 11.0876 3.50177 11.6081 3.60807 12.2134L4.20066 15.5878C4.46138 17.0725 4.55052 19.1942 5.8516 20.2402C6.8062 21 8.18162 21 10.9325 21H12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M14.1418 13.4418C15.3486 12.7108 16.4018 13.0054 17.0345 13.4747C17.294 13.6671 17.4237 13.7633 17.5 13.7633C17.5763 13.7633 17.706 13.6671 17.9655 13.4747C18.5982 13.0054 19.6514 12.7108 20.8582 13.4418C22.4419 14.4013 22.8002 17.5666 19.1472 20.237C18.4514 20.7457 18.1035 21 17.5 21C16.8965 21 16.5486 20.7457 15.8528 20.237C12.1998 17.5666 12.5581 14.4013 14.1418 13.4418Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            className="w-8 h-8 tablet:w-12 tablet:h-12 laptop:w-16 laptop:h-16 text-black"
+                            fill="none"
+                        >
+                            <path d="M11.5 8H20.196C20.8208 8 21.1332 8 21.3619 8.10084C22.3736 8.5469 21.9213 9.67075 21.7511 10.4784C21.7187 10.6318 21.6188 10.7251 21.5 10.8013M7.5 8H3.80397C3.17922 8 2.86684 8 2.63812 8.10084C1.6264 8.5469 2.07874 9.67075 2.24894 10.4784C2.27952 10.6235 2.37896 10.747 2.51841 10.8132C3.09673 11.0876 3.50177 11.6081 3.60807 12.2134L4.20066 15.5878C4.46138 17.0725 4.55052 19.1942 5.8516 20.2402C6.8062 21 8.18162 21 10.9325 21H12"
+                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                            <path d="M14.1418 13.4418C15.3486 12.7108 16.4018 13.0054 17.0345 13.4747C17.294 13.6671 17.4237 13.7633 17.5 13.7633C17.5763 13.7633 17.706 13.6671 17.9655 13.4747C18.5982 13.0054 19.6514 12.7108 20.8582 13.4418C22.4419 14.4013 22.8002 17.5666 19.1472 20.237C18.4514 20.7457 18.1035 21 17.5 21C16.8965 21 16.5486 20.7457 15.8528 20.237C12.1998 17.5666 12.5581 14.4013 14.1418 13.4418Z"
+                                stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                             <path d="M6.5 11L10 3M15 3L17.5 8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                         </svg>
                     </span>
-                    <h2 className='text-3xl font-semibold text-gray-800'>Shopping Cart</h2>
+                    <h2 className='text-2xl tablet:text-3xl font-semibold text-gray-800'>Shopping Cart</h2>
                 </div>
+
                 {cart.items.length === 0 ? (
                     <div className="text-center text-gray-500">
                         <p>Your cart is empty!</p>
@@ -83,15 +90,15 @@ const CartPage = () => {
                     </div>
                 ) : (
                     <>
-                        <div className='p-8 rounded-lg custom-galssmorpuism'>
+                        <div className='p-4 tablet:p-8 rounded-lg custom-galssmorpuism'>
                             <div className="flex items-center mb-4">
                                 <input
                                     type="checkbox"
                                     onChange={handleSelectAll}
                                     checked={selectedItems.size === cart.items.length}
-                                    className="mr-2 w-6 h-6 rounded-xl border-gray-100"
+                                    className="mr-2 w-4 h-4 tablet:w-6 tablet:h-6 rounded-xl border-gray-100"
                                 />
-                                <span className='text-lg font-normal'>Select All</span>
+                                <span className='tablet:text-lg font-normal'>Select All</span>
                             </div>
                             {cart.items.map(item => (
                                 <CartItem
@@ -103,7 +110,7 @@ const CartPage = () => {
                                     onSelectItem={handleSelectItem}
                                 />
                             ))}
-                            <div className="flex justify-between items-center mt-6">
+                            <div className="flex flex-col tablet:flex-row justify-between items-center mt-6">
                                 <button>
                                     <Link
                                         to="/products"
@@ -112,10 +119,10 @@ const CartPage = () => {
                                         Back to Product Page
                                     </Link>
                                 </button>
-                                <div className="text-lg font-normal bg-primary-color/15 px-4 py-2 rounded-md">
+                                <div className="text-lg font-normal bg-primary-color/15 px-4 py-2 rounded-md mt-4 tablet:mt-0">
                                     Total: ฿{calculateTotal().toFixed(2)}
                                 </div>
-                                <div className="flex items-center">
+                                <div className="flex items-center mt-4 tablet:mt-0">
                                     <div className="relative group">
                                         <button
                                             onClick={handleSelectedItemsRemoval}

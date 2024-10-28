@@ -69,7 +69,7 @@ const ProductCard = ({ product }) => {
                 spaceBetween={10}
                 slidesPerView={1}
                 pagination={{ clickable: true }}
-                className="w-full h-20 tablet:h-40 mb-4"
+                className="w-full h-32 tablet:h-40 mb-4"
             >
                 {Array.isArray(product.images) && product.images.length > 0 ? (
                     product.images.map((img, index) => (
@@ -90,7 +90,7 @@ const ProductCard = ({ product }) => {
                 )}
             </Swiper>
 
-            <div className="tablet:flex items-center justify-between mb-2">
+            <div className="tablet:flex items-center justify-between tablet:mb-2">
                 <h2 className="text-sm tablet:text-lg font-medium truncate flex-1 mr-2">{product.name}</h2>
                 <span className="text-gray-800 text-base font-medium rounded-full tablet:px-3 py-1 tablet:bg-primary-color/15 inline-flex items-center gap-1 whitespace-nowrap">
                     <span className="text-xs tablet:text-base text-primary-color">฿</span>
@@ -100,12 +100,12 @@ const ProductCard = ({ product }) => {
                 </span>
             </div>
 
-            <div className="text-gray-500 text-xs tablet:text-base mb-4 w-full">
+            <div className="text-gray-500 text-xs tablet:text-base tablet:mb-4 w-full">
                 <div className="w-full">
                     {renderDescription(product.description)}
                     {product.description && product.description.split('\n').filter(point => point.trim()).length > 1 && (
                         <button
-                            className="text-gray-400 text-xs mt-2 underline flex items-center hover:text-gray-600"
+                            className="text-gray-400 tablet:text-xs  mt-2 underline flex items-center hover:text-gray-600"
                             onClick={toggleDescription}
                         >
                             {isExpanded ? 'Show Less' : 'Read More'}
@@ -150,7 +150,7 @@ const ProductCard = ({ product }) => {
             <div className='flex justify-between gap-2 items-center mt-4'>
                 <button
                     onClick={handleBuyNow}
-                    className="w-full text-xs tablet:text-base hover:bg-primary-color hover:text-white text-white bg-primary-color/80 p-3 py-2 rounded-lg flex justify-center items-center space-x-2"
+                    className="w-full text-sm tablet:text-base hover:bg-primary-color hover:text-white text-white bg-primary-color/80 p-3 py-2 rounded-lg flex justify-center items-center space-x-2"
                 >
                     <span>Buy Now</span>
                 </button>

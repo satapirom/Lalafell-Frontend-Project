@@ -19,7 +19,7 @@ const FavoriteButton = ({ productId }) => {
         try {
             // ใช้ toggleWishlistItem แทนการแยก add/remove
             await toggleWishlistItem(productId);
-            toast.success(isFavorited ? 'ลบออกจากรายการโปรดแล้ว' : 'เพิ่มในรายการโปรดแล้ว');
+            toast.success(isFavorited ? 'removed from wishlist' : 'added to wishlist');
             await fetchWishlist();
         } catch (error) {
             console.error('Error updating wishlist:', error);
@@ -41,7 +41,7 @@ const FavoriteButton = ({ productId }) => {
     };
 
     return (
-        <div className="mt-2 items-center">
+        <div className="flex items-center">
             <button
                 onClick={handleClick}
                 onMouseEnter={handleMouseEnter}

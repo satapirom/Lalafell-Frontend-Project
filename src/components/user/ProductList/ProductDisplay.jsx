@@ -154,9 +154,9 @@ const ProductDisplay = () => {
     );
 
     return (
-        <div className="container mx-auto mt-10 p-4 tablet:p-8 rounded-lg custom-bg relative">
+        <div className="container mx-auto pt-14 tablet:p-8 rounded-lg custom-bg relative">
             <div className='flex items-center justify-between mb-2'>
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-2 mx-4 tablet:mx-0'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#5c6bc0" fill="none">
                         <path d="M3 10.5V15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H12.5M21 10.5V12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                         <path d="M7 17H11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -172,7 +172,7 @@ const ProductDisplay = () => {
                 </div>
                 <div >
                     {/* แสดงฟิลเตอร์สำหรับแท็บเล็ต */}
-                    <div className="hidden tablet:flex space-x-4 items-center mb-4">
+                    <div className="hidden tablet:flex space-x-4 items-center  mb-2">
                         <CategoryFilter
                             isSizeOpen={isCategoryOpen}
                             toggleSize={toggleCategory}
@@ -197,7 +197,7 @@ const ProductDisplay = () => {
                     {/* ปุ่มสำหรับเปิด/ปิดฟิลเตอร์ในขนาดมือถือ */}
                     <button
                         onClick={() => setShowFilters(!showFilters)}
-                        className="text-primary-color tablet:hidden"
+                        className="text-primary-color tablet:hidden mx-4"
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#5c6dc0" fill="none">
                             <path d="M3 7H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
