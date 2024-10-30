@@ -21,7 +21,7 @@ import OrderSuccess from './components/user/Checkout/OrderSuccess.jsx';
 import { WishlistProvider } from './contexts/WishlistContext.jsx';
 import WishlistPage from './components/user/Products/WishlistPage.jsx';
 import OrderDashboard from './components/user/Order/OrderDashboard.jsx';
-
+import CustomPage from './components/user/custom/CustomPage.jsx';
 // admin
 import AddProducts from './pages/admin/AddProducts.jsx';
 import Card from './components/user/OurProduct/Card.jsx';
@@ -68,6 +68,7 @@ function MainApp() {
         <Route path='/order-confirmation' element={<OrderSuccess />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path='/orderlist' element={<OrderDashboard />} />
+        <Route path='/custom' element={<CustomPage />} />
 
         {/* Admin */}
         <Route path="/products/new" element={<AddProducts />} />
