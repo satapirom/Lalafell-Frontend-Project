@@ -113,7 +113,7 @@ const CreditCardSection = () => {
             {error && <div className="text-red-500 bg-red-100 p-2 rounded">{error}</div>}
             <div className='flex justify-between items-center'>
                 <div>
-                    <p className="bg-primary-color/15 rounded-full px-4 py-1">
+                    <p className=" rounded-full px-4 py-1">
                         {cards.length === 0
                             ? "No credit/debit cards found. Add a new payment to get started."
                             : `${cards.length} credit/debit card${cards.length !== 1 ? 's' : ''} found.`}

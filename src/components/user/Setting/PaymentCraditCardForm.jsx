@@ -127,12 +127,12 @@ const PaymentCraditCardForm = ({ onSavePaymentMethod, onCancel, editingCard }) =
                                 </div>
                                 <div className="flex justify-between items-end">
                                     <div>
-                                        <div className="text-xs opacity-75 text-pink-700">Card Holder</div>
-                                        <div className="text-pink-700">{formData.accountHolderName || 'YOUR CUTE NAME'}</div>
+                                        <div className="text-xs opacity-75 text-white">Card Holder</div>
+                                        <div className="text-white">{formData.accountHolderName || 'YOUR CUTE NAME'}</div>
                                     </div>
                                     <div>
-                                        <div className="text-xs opacity-75 text-pink-700">Expires</div>
-                                        <div className="text-pink-700">{formData.expiryDate ? formData.expiryDate.toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' }) : 'xx/xx'}</div>
+                                        <div className="text-xs opacity-75 text-white">Expires</div>
+                                        <div className="text-white">{formData.expiryDate ? formData.expiryDate.toLocaleDateString('en-US', { month: '2-digit', year: '2-digit' }) : 'xx/xx'}</div>
                                     </div>
                                 </div>
                             </div>
