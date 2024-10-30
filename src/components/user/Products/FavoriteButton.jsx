@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useWishlist } from '../../../contexts/WishlistContext';
 import { toggleWishlistItem } from '../../../services/wishlistServices';
@@ -10,7 +9,7 @@ const FavoriteButton = ({ productId }) => {
     const { isLoggedIn } = useAuth();
     const [localLoading, setLocalLoading] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
-    
+
     const isFavorited = isInWishlist(productId);
 
     const handleClick = async () => {
@@ -26,11 +25,7 @@ const FavoriteButton = ({ productId }) => {
 
         try {
             await toggleWishlistItem(productId);
-<<<<<<< HEAD
-            toast.success(isFavorited ? 'removed from wishlist' : 'added to wishlist');
-=======
             toast.success(isFavorited ? 'Removed from wishlist' : 'Added to wishlist');
->>>>>>> 1b26c91523b6efc228ca6b865d019f7f9d4f057f
             await fetchWishlist();
         } catch (error) {
             console.error('Error updating wishlist:', error);
@@ -42,18 +37,6 @@ const FavoriteButton = ({ productId }) => {
     };
 
     return (
-<<<<<<< HEAD
-        <div className="flex items-center">
-            <button
-                onClick={handleClick}
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                className={`flex items-center justify-center p-2 border w-full bg-primary-color/15 rounded-lg focus:outline-none transition-transform ease-in-out duration-300
-                    ${isFavorited ? 'text-red-500' : 'text-gray-500'}
-                    ${isAnimating ? 'scale-125' : 'scale-100'}
-                    ${localLoading || isLoading ? 'opacity-50 cursor-not-allowed' : 'opacity-100 hover:bg-primary-color/25'}`}
-                disabled={localLoading || isLoading}
-=======
         <button
             onClick={handleClick}
             className={`flex items-center justify-center p-2 rounded-lg transition-all duration-300 bg-primary-color/15
@@ -69,7 +52,6 @@ const FavoriteButton = ({ productId }) => {
                 fill={isFavorited ? "currentColor" : "none"}
                 stroke="currentColor"
                 strokeWidth="2"
->>>>>>> 1b26c91523b6efc228ca6b865d019f7f9d4f057f
             >
                 <path
                     d="M19.4626 3.99415C16.7809 2.34923 14.4404 3.01211 13.0344 4.06801C12.4578 4.50096 12.1696 4.71743 12 4.71743C11.8304 4.71743 11.5422 4.50096 10.9656 4.06801C9.55962 3.01211 7.21909 2.34923 4.53744 3.99415C1.01807 6.15294 0.221721 13.2749 8.33953 19.2834C9.88572 20.4278 10.6588 21 12 21C13.3412 21 14.1143 20.4278 15.6605 19.2834C23.7783 13.2749 22.9819 6.15294 19.4626 3.99415Z"

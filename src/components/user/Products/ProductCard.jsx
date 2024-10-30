@@ -69,11 +69,7 @@ const ProductCard = ({ product }) => {
                 spaceBetween={10}
                 slidesPerView={1}
                 pagination={{ clickable: true }}
-<<<<<<< HEAD
                 className="w-full h-32 tablet:h-40 mb-4"
-=======
-                className="w-full h-36 tablet:h-40 mb-4"
->>>>>>> 1b26c91523b6efc228ca6b865d019f7f9d4f057f
             >
                 {Array.isArray(product.images) && product.images.length > 0 ? (
                     product.images.map((img, index) => (
@@ -104,11 +100,7 @@ const ProductCard = ({ product }) => {
                 </span>
             </div>
 
-<<<<<<< HEAD
             <div className="text-gray-500 text-xs tablet:text-base tablet:mb-4 w-full">
-=======
-            <div className="text-gray-500  tablet:text-base tablet:mb-4 w-full">
->>>>>>> 1b26c91523b6efc228ca6b865d019f7f9d4f057f
                 <div className="w-full">
                     {renderDescription(product.description)}
                     {product.description && product.description.split('\n').filter(point => point.trim()).length > 1 && (
@@ -116,9 +108,9 @@ const ProductCard = ({ product }) => {
                             className="text-gray-400 tablet:text-xs  mt-2 underline flex items-center hover:text-gray-600"
                             onClick={toggleDescription}
                         >
-                           <Link to={`/product/${product._id}`}>
-                           <h4>Read more</h4>
-                           </Link>
+                            <Link to={`/product/${product._id}`}>
+                                <h4>Read more</h4>
+                            </Link>
                         </button>
                     )}
                 </div>
