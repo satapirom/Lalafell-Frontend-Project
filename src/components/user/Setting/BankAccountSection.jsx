@@ -101,7 +101,7 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
     }
 
     return (
-        <div className='p-2 tablet:p-8'>
+        <div className=''>
             {error && <div className="text-red-500">{error}</div>}
             <div className='flex justify-between'>
                 <div>
@@ -116,15 +116,15 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
                         onClick={handleAddBankAccount}
                         className="bg-primary-color text-white px-6 py-2 rounded-md hover:bg-primary-color/80 transition duration-200 flex items-center"
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                        viewBox="0 0 24 24" 
-                        color="#ffffff" 
-                        fill="none"
-                        className='w-4 h-4 tablet:w-6 tablet:h-6'>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            color="#ffffff"
+                            fill="none"
+                            className='w-4 h-4 tablet:w-6 tablet:h-6'>
                             <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         <span className='hidden laptop:block ml-2'>
-                        Add Bank Account
+                            Add Bank Account
                         </span>
                     </button>
                 </div>
@@ -136,13 +136,13 @@ const BankAccountSection = ({ user, onDelete, onClose }) => {
                             <div className="flex items-center space-x-4">
                                 <ul className="space-y-1 text-sm leading-relaxed">
                                     <li className="font-medium">
-                                       {account.bankName}
+                                        {account.bankName}
                                     </li>
                                     <li className="font-light">
-                                       {account.accountHolderName}
+                                        {account.accountHolderName}
                                     </li>
                                     <li className="font-light">
-                                       {account.accountNumber}
+                                        {account.accountNumber}
                                     </li>
                                 </ul>
 

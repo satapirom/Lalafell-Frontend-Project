@@ -1,68 +1,63 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IoIosArrowDropdown } from "react-icons/io";
 
-const CategoryFilter = ({ isSizeOpen, toggleSize, handleCategorySelect, selectedCategory, onClose }) => {
+const CategoryFilter = ({ selectedCategory, handleCategorySelect, onClose }) => {
+    const [isOpen, setIsOpen] = useState(false);
     const filterRef = useRef(null);
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (filterRef.current && !filterRef.current.contains(event.target)) {
-                onClose();
-            }
-        };
+    const options = [
+        { label: "All Products", value: '' },
+        { label: "Keyboards", value: 'keyboard' },
+        { label: "Key Caps", value: 'keycap' },
+        { label: "Switch", value: 'switch' },
+    ];
 
+    const toggleCategoryDropdown = () => {
+        setIsOpen(prev => !prev);
+    };
+
+    const handleClickOutside = (event) => {
+        if (filterRef.current && !filterRef.current.contains(event.target)) {
+            setIsOpen(false);
+            if (onClose) onClose();
+        }
+    };
+
+    useEffect(() => {
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [onClose]);
+    }, []);
 
-    const handleClick = (category) => {
-        handleCategorySelect(category);
-        onClose();
+    const handleSelectOption = (option) => {
+        handleCategorySelect(option.value);
+        setIsOpen(false);
+        if (onClose) onClose();
     };
 
     return (
-        <div ref={filterRef} className="relative">
+        <div ref={filterRef} className="relative min-w-[160px]">
             <div
-                className="flex items-center cursor-pointer bg-white/50 hover:bg-primary-color/15 text-gray-700  py-2 px-4 rounded-full transition duration-300 ease-in-out shadow-sm"
-                onClick={toggleSize}
+                className="flex items-center cursor-pointer bg-gray-100 hover:bg-primary-color/10 text-gray-700 py-2 px-4 rounded-full transition-all duration-300"
+                onClick={toggleCategoryDropdown}
             >
-                <label className="flex items-center cursor-pointer">
-                    <span className="mr-2 hover:text-primary-color ">
-                        Category: {selectedCategory || 'All'}
-                    </span>
-                    <IoIosArrowDropdown size={20} className="ml-1" />
-                </label>
+                <span className="mr-2">
+                    Category: {selectedCategory || 'All'}
+                </span>
+                <IoIosArrowDropdown size={20} className="text-gray-500" />
             </div>
 
-            {isSizeOpen && (
-                <div className='absolute top-full left-0 mt-2 z-30'>
-                    <ul className="mb-4 custom-galssmorpuism p-4 rounded-lg w-80 shadow-md">
+            {isOpen && (
+                <ul className="absolute z-30 w-48 p-2 mt-1 border border-gray-300 rounded-lg custom-galssmorpuism shadow-lg">
+                    {options.map((option, index) => (
                         <li
-                            className='block mr-2 cursor-pointer hover:bg-primary-color/80  rounded-md py-2 px-4 text-gray-800 hover:text-white'
-                            onClick={() => handleClick('')}
+                            key={index}
+                            className="px-4 py-2 hover:bg-primary-color hover:text-white rounded-lg cursor-pointer transition-all"
+                            onClick={() => handleSelectOption(option)}
                         >
-                            All Products
+                            {option.label}
                         </li>
-                        <li
-                            className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
-                            onClick={() => handleClick('keyboard')}
-                        >
-                            Keyboards
-                        </li>
-                        <li
-                            className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
-                            onClick={() => handleClick('keycap')}
-                        >
-                            Key Caps
-                        </li>
-                        <li
-                            className='block mr-2 cursor-pointer hover:bg-primary-color/80 rounded-md py-2 px-4 text-gray-800 hover:text-white'
-                            onClick={() => handleClick('switch')}
-                        >
-                            Switch
-                        </li>
-                    </ul>
-                </div>
+                    ))}
+                </ul>
             )}
         </div>
     );

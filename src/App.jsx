@@ -1,11 +1,14 @@
 import './App.css';
-import Navbar from './components/user/Navbar/Navbar';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './contexts/AuthContext.jsx';
+import { WishlistProvider } from './contexts/WishlistContext.jsx';
+
+// user
+import Navbar from './components/user/Navbar/Navbar';
 import Register from './pages/register/Register';
 import Login from './pages/login/Login';
 import Home from './pages/user/Home';
-import { AuthProvider } from './contexts/AuthContext.jsx';
 import Footer from './components/user/Footer/Footer';
 import Product from './pages/user/Product.jsx';
 import Profile from './pages/user/Profile.jsx';
@@ -18,10 +21,10 @@ import CartPage from './pages/user/CartPage.jsx';
 import DeliveryAddressManagement from './components/user/Checkout/DeliveryAddressManagement.jsx';
 import SelectPaymethod from './components/user/Checkout/SelectPayMethod.jsx';
 import OrderSuccess from './components/user/Checkout/OrderSuccess.jsx';
-import { WishlistProvider } from './contexts/WishlistContext.jsx';
 import WishlistPage from './components/user/Products/WishlistPage.jsx';
 import OrderDashboard from './components/user/Order/OrderDashboard.jsx';
 import CustomPage from './components/user/custom/CustomPage.jsx';
+import SearchResultPage from './components/user/Navbar/SearchResultPage.jsx';
 // admin
 import AddProducts from './pages/admin/AddProducts.jsx';
 import Card from './components/user/OurProduct/Card.jsx';
@@ -69,6 +72,7 @@ function MainApp() {
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path='/orderlist' element={<OrderDashboard />} />
         <Route path='/custom' element={<CustomPage />} />
+        <Route path='/search' element={<SearchResultPage />} />
 
         {/* Admin */}
         <Route path="/products/new" element={<AddProducts />} />

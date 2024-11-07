@@ -154,7 +154,7 @@ const ProductDisplay = () => {
     );
 
     return (
-        <div className="container mx-auto pt-14 tablet:p-8 rounded-lg custom-bg relative">
+        <div className="container mx-auto mt-12 tablet:p-8 rounded-lg custom-bg relative">
             <div className='flex items-center justify-between mb-2'>
                 <div className='flex items-center gap-2 mx-4 tablet:mx-0'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" color="#5c6bc0" fill="none">

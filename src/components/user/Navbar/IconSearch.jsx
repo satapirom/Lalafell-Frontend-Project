@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { searchProducts } from '../../../services/productServices';
 
 const ProductSearch = () => {
@@ -10,6 +10,7 @@ const ProductSearch = () => {
     const [error, setError] = useState(null);
     const inputRef = useRef(null);
     const navigate = useNavigate();
+
 
     const searchBoxClasses = `transition-all duration-500 ease-in-out overflow-hidden
     ${isOpen ? 'min-w-[200px] tablet:min-w-[300px] opacity-100 ml-3' : 'w-0 opacity-0'}`;
@@ -67,21 +68,31 @@ const ProductSearch = () => {
     const handleSearch = (e) => {
         e.preventDefault();
         if (query.trim()) {
-            navigate(`/products?search=${encodeURIComponent(query.trim())}`);
+            navigate(`/search?search=${encodeURIComponent(query.trim())}`);
             resetSearch();
         }
     };
 
-    const handleProductClick = (product) => {
-        // ส่งข้อมูลสินค้าผ่าน state navigation
-        navigate(`/products/${product._id}`, {
-            state: {
-                searchQuery: query.trim(),
-                selectedProduct: product
-            }
-        });
-        resetSearch();
+    const handleProductClick = async (product) => {
+        try {
+            // เรียกข้อมูลสินค้าจาก API
+            const productData = await searchProducts(product._id);
+
+            // ส่งข้อมูลสินค้าผ่าน state navigation
+            navigate(`/product/${product._id}`, {
+                state: {
+                    searchQuery: query.trim(),
+                    selectedProduct: productData // ใช้ข้อมูลสินค้าที่ดึงมาจาก API
+                }
+            });
+
+            resetSearch();
+        } catch (error) {
+            console.error('Error fetching product data:', error);
+            // สามารถแสดงข้อความแจ้งเตือนหรือให้ผู้ใช้ทราบได้ที่นี่
+        }
     };
+
 
     const resetSearch = () => {
         setIsOpen(false);

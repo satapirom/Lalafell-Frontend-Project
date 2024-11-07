@@ -113,7 +113,7 @@ const CreditCardSection = () => {
             {error && <div className="text-red-500 bg-red-100 p-2 rounded">{error}</div>}
             <div className='flex justify-between items-center'>
                 <div>
-                    <p className=" rounded-full px-4 py-1">
+                    <p className=" px-4 py-1">
                         {cards.length === 0
                             ? "No credit/debit cards found. Add a new payment to get started."
                             : `${cards.length} credit/debit card${cards.length !== 1 ? 's' : ''} found.`}
@@ -121,21 +121,21 @@ const CreditCardSection = () => {
                 </div>
                 <button
                     onClick={handleAddCreditCard}
-                   
+
                     disabled={isLoading}
                     className="bg-primary-color text-white px-6 py-2 rounded-md hover:bg-primary-color/80 transition duration-200 flex items-center"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                        viewBox="0 0 24 24" 
-                        color="#ffffff" 
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        color="#ffffff"
                         fill="none"
                         className='w-4 h-4 tablet:w-6 tablet:h-6'>
-                            <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-                        </svg>
-                        <span className='hidden laptop:block ml-2'>
+                        <path d="M12 4V20M20 12H4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    <span className='hidden laptop:block ml-2'>
                         Add Credit Card
-                        </span>
-                    </button>
+                    </span>
+                </button>
             </div>
             {cards.length > 0 && (
                 <ul className="divide-y divide-gray-200">

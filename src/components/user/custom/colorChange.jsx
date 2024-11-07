@@ -1,32 +1,33 @@
+import React, { useState } from 'react';
 import { Canvas } from '@react-three/fiber';
-import Keycap from './Keycap';
-import { OrbitControls } from '@react-three/drei';
-import { useState } from 'react';
+import Keycap from './Keycap'; // Import Keycap component
 
-const CustomPage = () => {
-  const [keycapColor, setKeycapColor] = useState("#F5F5DC"); // สีเริ่มต้น
+const App = () => {
+  const [textureUrl, setTextureUrl] = useState(null);
 
-  const handleColorChange = (event) => {
-    setKeycapColor(event.target.value); // อัพเดตสีเมื่อผู้ใช้เลือก
+  // Function for uploading texture image
+  const handleTextureUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setTextureUrl(url);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-800">
-      <Canvas>
-        <ambientLight color={0xffffff} intensity={3} />
-        <directionalLight color={0xffffff} position={[5, 5, 5]} intensity={1} />
-        <Keycap color={keycapColor} /> {/* ส่ง prop color */}
-        <OrbitControls enablePan={false} enableZoom={false} />
+    <div style={{ width: '100vw', height: '100vh' }}>
+      <input type="file" accept="image/*" onChange={handleTextureUpload} />
+      <Canvas
+        camera={{ position: [0, 0, 2] }} // Set camera position
+        shadows
+      >
+        <ambientLight intensity={0.5} />
+        <pointLight position={[5, 5, 5]} castShadow />
+        <Keycap textureUrl={textureUrl} /> {/* Pass textureUrl to Keycap */}
       </Canvas>
-      
-      <input 
-        type="color" 
-        value={keycapColor} 
-        onChange={handleColorChange} 
-        className="mt-4" 
-      />
     </div>
   );
-}
+};
 
-export default CustomPage;
+export default App;
+
