@@ -40,7 +40,7 @@ const FavoriteButton = ({ productId }) => {
         <button
             onClick={handleClick}
             className={`flex items-center justify-center p-2 rounded-lg transition-all duration-300 bg-primary-color/15
-                ${isFavorited ? 'text-red-500' : 'text-gray-500'}
+                ${isFavorited ? 'text-red-500' : 'text-primary-color'}
                 ${isAnimating ? 'scale-110' : 'scale-100'}
                 ${localLoading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'}`}
             disabled={localLoading}
