@@ -63,7 +63,7 @@ const AddToCartPage = () => {
             <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg overflow-hidden">
                 <div className="p-8">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center space-x-2">
-                        <ShoppingCart className="w-6 h-6 text-pink-600 animate-bounce" />
+                        <ShoppingCart className="w-6 h-6 text-primary-color animate-bounce" />
                         <span>Your Shopping Cart</span>
                     </h2>
                     {cartItems.length === 0 ? (

@@ -4,18 +4,21 @@ import { useNavigate } from 'react-router-dom';
 
 const useAuth = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
             await axiosInstance.post('/logout');
-            navigate('/'); // Redirect to home after logout
+            setUser(null);
+            setIsAuthenticated(false);
+            navigate('/');
         } catch (error) {
             console.error('Error during logout:', error);
         }
     };
 
-    //เก็บ state ของ drowdown in navbar
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     };
@@ -23,9 +26,20 @@ const useAuth = () => {
     useEffect(() => {
         const checkAuth = async () => {
             try {
-                await axiosInstance.get('/check');
+                const response = await axiosInstance.get('/check');
+                if (response.data && response.data.user) {
+                    setUser(response.data.user);
+                    setIsAuthenticated(true);
+                } else {
+                    setUser(null);
+                    setIsAuthenticated(false);
+                    navigate('/login');
+                }
             } catch (error) {
-                navigate('/login'); // Redirect to login if not authenticated
+                console.error('Auth check error:', error);
+                setUser(null);
+                setIsAuthenticated(false);
+                navigate('/login');
             }
         };
 
@@ -33,6 +47,8 @@ const useAuth = () => {
     }, [navigate]);
 
     return {
+        user,
+        isAuthenticated,
         isDropdownOpen,
         toggleDropdown,
         handleLogout

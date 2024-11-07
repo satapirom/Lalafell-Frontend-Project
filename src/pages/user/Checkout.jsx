@@ -6,7 +6,7 @@ import DeliveryAddress from '../../components/user/Checkout/DeliveryAddress';
 import PaymentCheckout from '../../components/user/Checkout/PaymentChackout';
 import useAddress from '../../hooks/user/useAddress';
 import YouMayAlsoLike from '../../components/user/YouMayAlsoLike/YouMayAlsoLike';
-
+import toast from 'react-hot-toast';
 
 const Checkout = () => {
     const location = useLocation();
@@ -14,6 +14,7 @@ const Checkout = () => {
     const { user } = useAuth();
     const selectedItems = location.state?.selectedCartItems || [];
     const [cart, setCart] = useState({ items: [], totalAmount: 0, totalQuantity: 0 });
+    const [isLoading, setIsLoading] = useState(false);
 
     const { selectedAddress, defaultAddress } = useAddress();
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
@@ -22,32 +23,66 @@ const Checkout = () => {
     useEffect(() => {
         const storedMethod = localStorage.getItem('selectedPaymentMethod');
         if (storedMethod) {
-            setSelectedPaymentMethod(JSON.parse(storedMethod));
+            try {
+                setSelectedPaymentMethod(JSON.parse(storedMethod));
+            } catch (error) {
+                console.error("Error parsing payment method:", error);
+                localStorage.removeItem('selectedPaymentMethod');
+            }
         }
     }, []);
 
+    useEffect(() => {
+        // Redirect if no items selected
+        if (selectedItems.length === 0) {
+            toast.error('No items selected for checkout');
+            navigate('/cart');
+        }
+    }, [selectedItems, navigate]);
+
     const clearCart = () => {
         try {
-            // Clear cart state
             setCart({ items: [], totalAmount: 0, totalQuantity: 0 });
-
-            // Clear the cart in localStorage
-            localStorage.removeItem('cart'); // Make sure to clear the cart from localStorage as well
+            localStorage.removeItem('cart');
+            localStorage.removeItem('selectedPaymentMethod');
         } catch (error) {
             console.error("Error clearing cart:", error);
+            toast.error('Error clearing cart');
         }
     };
 
-    const handlePlaceOrder = async () => {
-        setError(null);
-        const shippingAddress = selectedAddress || defaultAddress;
+    const validateOrder = () => {
 
-        if (!shippingAddress || !selectedPaymentMethod) {
-            setError('Please provide a shipping address and payment method.');
-            return;
+        if (selectedItems.length === 0) {
+            toast.error('No items selected for checkout');
+            return false;
         }
 
+        const shippingAddress = selectedAddress || defaultAddress;
+        if (!shippingAddress) {
+            toast.error('Please select a delivery address');
+            return false;
+        }
+
+        if (!selectedPaymentMethod) {
+            toast.error('Please select a payment method');
+            return false;
+        }
+
+        return true;
+    };
+
+    const handlePlaceOrder = async () => {
+        if (!validateOrder()) return;
+
+        setIsLoading(true);
+        setError(null);
+
+        const loadingToast = toast.loading('Creating your order...');
+
         try {
+            const shippingAddress = selectedAddress || defaultAddress;
+
             const orderData = {
                 items: selectedItems.map(item => ({
                     product: item.product._id,
@@ -55,7 +90,7 @@ const Checkout = () => {
                     price: item.product.price,
                 })),
                 totalAmount: calculateTotal(),
-                status: 'pending',
+                status: 'payment',
                 shippingAddress: {
                     name: shippingAddress.name,
                     phone: shippingAddress.phone,
@@ -72,24 +107,36 @@ const Checkout = () => {
             };
 
             const response = await createOrder(orderData);
-            if (response && response.order) {
-                console.log('Order created successfully:', response);
 
+            if (response && response.order) {
+                toast.success('Order created successfully!', {
+                    id: loadingToast
+                });
                 clearCart();
-                navigate('/order-confirmation', { state: { orderId: response.order._id } });
+                navigate('/order-confirmation', {
+                    state: {
+                        orderId: response.order._id,
+                        orderDetails: response.order
+                    }
+                });
             } else {
-                console.error('Order creation failed:', response);
+                throw new Error('Order creation failed: Invalid response');
             }
         } catch (error) {
             console.error('Error creating order:', error);
+            toast.error(error.message || 'Failed to create order', {
+                id: loadingToast
+            });
             setError(error.message || 'An error occurred while creating the order.');
+        } finally {
+            setIsLoading(false);
         }
     };
 
     const handleCancelOrder = () => {
-        // Clear the cart and navigate to another page or reset the state
+        toast.success('Order cancelled');
         clearCart();
-        navigate('/'); // Navigate to the homepage or any other desired page
+        navigate('/');
     };
 
     const calculateTotal = () => {
@@ -147,14 +194,16 @@ const Checkout = () => {
                 </div>
                 <div className="flex justify-end space-x-2">
                     <button
-                        onClick={handleCancelOrder} // เพิ่มฟังก์ชันการยกเลิก
-                        className="border border-primary-color text-gray-800 hover:text-white px-6 py-3 rounded-md hover:bg-primary-color/70 transition duration-300 mt-8 ml-4">
+                        onClick={handleCancelOrder}
+                        disabled={isLoading}
+                        className="border border-primary-color text-gray-800 hover:text-white px-6 py-3 rounded-md hover:bg-primary-color/70 transition duration-300 mt-8 ml-4 disabled:opacity-50">
                         Cancel
                     </button>
                     <button
                         onClick={handlePlaceOrder}
-                        className="bg-primary-color text-white px-6 py-3 rounded-md hover:bg-primary-color/80 transition duration-300 mt-8">
-                        Confirm Order
+                        disabled={isLoading}
+                        className="bg-primary-color text-white px-6 py-3 rounded-md hover:bg-primary-color/80 transition duration-300 mt-8 disabled:opacity-50">
+                        {isLoading ? 'Processing...' : 'Confirm Order'}
                     </button>
                 </div>
             </div>
